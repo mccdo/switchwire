@@ -1,4 +1,4 @@
-set( eventmanager_LIBS PocoFoundation PocoDataSQLite )
+set( eventmanager_LIBS PocoFoundation PocoData PocoDataSQLite )
     
 #Lets us address our internal includes as <eventmanager/foo.h>
 include_directories(

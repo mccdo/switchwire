@@ -4,19 +4,21 @@ project( eventmanager )
 
 SET( CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/CMakeModules" )
 SET( Poco_DIR "${PROJECT_SOURCE_DIR}/CMakeModules" )
-SET( POCO_ROOT "$ENV{POCO_INSTALL_DIR}" )
+SET( POCO_ROOT "$ENV{POCO_INSTALL_DIR}" CACHE PATH "docstring" )
 SET( Poco_INCLUDE_DIR "${POCO_ROOT}/include" )
 SET( Poco_LIBRARY_DIR "${POCO_ROOT}/lib" )
 
 set(BOOST_INCLUDEDIR "$ENV{BOOST_INSTALL_DIR}/include" CACHE PATH "docstring")
 
 FIND_PACKAGE(Boost)
-FIND_PACKAGE(Poco COMPONENTS SQLite Foundation)
+FIND_PACKAGE(Poco COMPONENTS SQLite Foundation Data)
 
 INCLUDE_DIRECTORIES( 
     ${Boost_INCLUDE_DIRS}
     ${Poco_INCLUDE_DIR}
 )
+#message( ${Poco_LIBRARY_DIR} )
+LINK_DIRECTORIES(${Poco_LIBRARY_DIR}/lib)
 
 SET( CMAKE_BUILD_TYPE RelWithDebInfo )
 
