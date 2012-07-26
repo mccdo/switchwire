@@ -37,6 +37,8 @@
 
 #include <eventmanager/EventManager.h>
 
+#include <iostream>
+
 using boost::shared_ptr;
 using boost::weak_ptr;
 using boost::signals2::scoped_connection;

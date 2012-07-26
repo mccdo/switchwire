@@ -1,24 +1,23 @@
-cmake_minimum_required (VERSION 2.6)
+cmake_minimum_required (VERSION 2.8.8)
 
-project( eventmanager )
+project( switchwire )
 
 SET( CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/CMakeModules" )
-SET( Poco_DIR "${PROJECT_SOURCE_DIR}/CMakeModules" )
-SET( POCO_ROOT "$ENV{POCO_INSTALL_DIR}" CACHE PATH "docstring" )
-SET( Poco_INCLUDE_DIR "${POCO_ROOT}/include" )
-SET( Poco_LIBRARY_DIR "${POCO_ROOT}/lib" )
+
+FIND_PACKAGE(POCO 1.4.1 REQUIRED COMPONENTS PocoFoundation PocoUtil PocoData PocoDataSQLite)
 
 set(BOOST_INCLUDEDIR "$ENV{BOOST_INSTALL_DIR}/include" CACHE PATH "docstring")
 
-FIND_PACKAGE(Boost)
-FIND_PACKAGE(Poco COMPONENTS SQLite Foundation Data)
+set(Boost_USE_STATIC_LIBS       OFF)
+set(Boost_USE_MULTITHREADED      ON)
+set(Boost_USE_STATIC_RUNTIME    OFF)
+
+FIND_PACKAGE(Boost 1.44.0 REQUIRED COMPONENTS system)
 
 INCLUDE_DIRECTORIES( 
     ${Boost_INCLUDE_DIRS}
-    ${Poco_INCLUDE_DIR}
+    ${POCO_INCLUDE_DIR}
 )
-#message( ${Poco_LIBRARY_DIR} )
-LINK_DIRECTORIES(${Poco_LIBRARY_DIR}/lib)
 
 SET( CMAKE_BUILD_TYPE RelWithDebInfo )
 

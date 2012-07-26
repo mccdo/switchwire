@@ -22,8 +22,17 @@ class EVENTMANAGER_EXPORT EventBase
 {
 public:
     EventBase(): this_(this, null_deleter()){}
-    EventBase( const EventBase& ): this_(this, null_deleter()){}
-    EventBase & operator=(EventBase const & rhs){}
+    EventBase( const EventBase& )
+        : 
+        this_(this, null_deleter())
+    {
+        ;    
+    }
+    EventBase& operator=(EventBase const & rhs)
+    {
+        return *this;
+    }
+
     virtual ~EventBase(){}
 
     /// Returns a weak pointer to this object without the need to create a

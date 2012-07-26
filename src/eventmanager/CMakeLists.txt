@@ -1,4 +1,3 @@
-set( eventmanager_LIBS PocoFoundation PocoData PocoDataSQLite )
     
 #Lets us address our internal includes as <eventmanager/foo.h>
 include_directories(
@@ -7,9 +6,9 @@ include_directories(
 
 #Lets us know we're building the library so export definition can be set up
 #correctly for win32
-IF(WIN32)
+#IF(WIN32)
 ADD_DEFINITIONS(-DEVENTMANAGER_LIBRARY)
-ENDIF (WIN32)
+#ENDIF (WIN32)
 
 FILE( GLOB srcs "*.cxx" )
 FILE( GLOB hdrs "*.h" )
@@ -19,7 +18,7 @@ SET(PUBLIC_HEADERS ${hdrs})
 
 SET(TARGET_NAME eventmanager)
 ADD_LIBRARY(${TARGET_NAME} SHARED ${TARGET_SRC} ${PUBLIC_HEADERS})
-TARGET_LINK_LIBRARIES(${TARGET_NAME} ${eventmanager_LIBS} )
+TARGET_LINK_LIBRARIES(${TARGET_NAME} ${eventmanager_LIBS} ${POCO_LIBRARIES})
 
 SET(INSTALL_INCDIR include)
 SET(INSTALL_BINDIR bin)
