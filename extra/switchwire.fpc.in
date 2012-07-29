@@ -1,0 +1,15 @@
+prefix=${fp_file_cwd}/../..
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: switchwire
+Description: switchwire release pre-compiled for VES
+Provides: switchwire
+Requires:
+Version: @switchwire_VERSION@
+Libs: @switchwire_FPC_LIBRARIES@
+Cflags: @switchwire_FPC_INCLUDES@
+Arch: noarch
+
+

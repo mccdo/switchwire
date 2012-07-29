@@ -1,0 +1,29 @@
+# - Config file for the switchwire package
+# It defines the following variables
+#  switchwire_INCLUDE_DIRS - include directories for switchwire
+#  switchwire_LIBRARIES    - libraries to link against
+#  switchwire_EXECUTABLE   - the bar executable
+
+@PACKAGE_INIT@
+
+# These are IMPORTED targets created by switchwireLibraryDepends.cmake
+set(switchwire_LIBRARIES "eventmanager" )
+set(switchwire_EXECUTABLE test)
+
+# Compute paths
+# get_filename_component(switchwire_CMAKE_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
+if(EXISTS "${PACKAGE_PREFIX_DIR}/CMakeCache.txt")
+    # In build tree
+    include("${PACKAGE_PREFIX_DIR}/lib/switchwireBuildTreeSettings.cmake")
+    # Our library dependencies (contains definitions for IMPORTED targets)
+    include("${PACKAGE_PREFIX_DIR}/lib/switchwireLibraryDepends.cmake")
+else()
+    set_and_check(switchwire_INCLUDE_DIRS "${PACKAGE_PREFIX_DIR}/include")
+    # The switchwire targets file.
+    if(EXISTS "${PACKAGE_PREFIX_DIR}/lib/switchwire-targets.cmake")
+        include("${PACKAGE_PREFIX_DIR}/lib/switchwire-targets.cmake")
+    endif()
+endif()
+
+# The location of the Useswitchwire.cmake file.
+set(switchwire_USE_FILE "${PACKAGE_PREFIX_DIR}/lib/Useswitchwire.cmake")
