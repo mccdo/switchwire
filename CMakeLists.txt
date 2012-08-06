@@ -94,7 +94,7 @@ add_subdirectory(src)
 # for debugging if they are present
 if(MSVC)
     install(
-        DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/\${CMAKE_INSTALL_CONFIG_NAME}/
+        DIRECTORY ${PROJECT_BINARY_DIR}/lib/\${CMAKE_INSTALL_CONFIG_NAME}/
         DESTINATION lib
         USE_SOURCE_PERMISSIONS
         COMPONENT Development
