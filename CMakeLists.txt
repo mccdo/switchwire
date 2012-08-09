@@ -148,6 +148,6 @@ configure_file(extra/switchwire.fpc.in
   "${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR}/flagpoll/switchwire.fpc" @ONLY)
 
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR}/flagpoll/switchwire.fpc
-        DESTINATION lib/flagpoll )
+        DESTINATION ${CMAKE_INSTALL_LIBDIR}/flagpoll )
 
 
