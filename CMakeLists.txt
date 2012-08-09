@@ -46,28 +46,13 @@ IF(WIN32)
     ENDIF(MSVC)
 ENDIF (WIN32)
 
-IF(UNIX AND NOT WIN32 AND NOT APPLE)
-  IF(CMAKE_SIZEOF_VOID_P MATCHES "8")
-      SET(LIB_POSTFIX "64" CACHE STRING "suffix for 32/64 dir placement")
-      MARK_AS_ADVANCED(LIB_POSTFIX)
-  ENDIF()
-ENDIF()
-IF(NOT DEFINED LIB_POSTFIX)
-    SET(LIB_POSTFIX "")
-ENDIF()
+if(CMAKE_COMPILER_IS_GNUCXX AND NOT WIN32 AND NOT APPLE)
+    include(GNUInstallDirs)
+endif(CMAKE_COMPILER_IS_GNUCXX AND NOT WIN32 AND NOT APPLE)
 
-################################################################################
-# Create lib directory if required
-
-IF("${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_BINARY_DIR}")
-   FILE(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
-ENDIF("${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_BINARY_DIR}")
-
-################################################################################
-
-SET(OUTPUT_LIBDIR ${PROJECT_BINARY_DIR}/lib)
-MAKE_DIRECTORY(${OUTPUT_LIBDIR})
-SET(LIBRARY_OUTPUT_PATH ${OUTPUT_LIBDIR})
+if(NOT DEFINED CMAKE_INSTALL_LIBDIR)
+  set(CMAKE_INSTALL_LIBDIR lib)
+endif(NOT DEFINED CMAKE_INSTALL_LIBDIR)
 
 add_subdirectory(src)
 
@@ -95,7 +80,7 @@ add_subdirectory(src)
 if(MSVC)
     install(
         DIRECTORY ${PROJECT_BINARY_DIR}/lib/\${CMAKE_INSTALL_CONFIG_NAME}/
-        DESTINATION lib
+        DESTINATION ${CMAKE_INSTALL_LIBDIR}
         USE_SOURCE_PERMISSIONS
         COMPONENT Development
         FILES_MATCHING PATTERN "*.pdb"
@@ -114,7 +99,7 @@ install( FILES "extra/Findswitchwire.cmake"
 
 # Add all targets to the build-tree export set
 export(TARGETS eventmanager
-  FILE "${PROJECT_BINARY_DIR}/lib/switchwireLibraryDepends.cmake")
+  FILE "${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR}/switchwireLibraryDepends.cmake")
 
 # Export the package for use from the build-tree
 # (this registers the build-tree with a global CMake-registry)
@@ -122,32 +107,32 @@ export(PACKAGE switchwire)
 
 # Create a switchwireBuildTreeSettings.cmake file for the use from the build tree
 configure_file(switchwireBuildTreeSettings.cmake.in
-  "${PROJECT_BINARY_DIR}/lib/switchwireBuildTreeSettings.cmake" @ONLY)
+  "${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR}/switchwireBuildTreeSettings.cmake" @ONLY)
 
 #configure_file(switchwireConfig.cmake.in
-#  "${PROJECT_BINARY_DIR}/lib/switchwireConfig.cmake" @ONLY)
+#  "${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR}/switchwireConfig.cmake" @ONLY)
 configure_file(switchwireConfigVersion.cmake.in
-  "${PROJECT_BINARY_DIR}/lib/switchwireConfigVersion.cmake" @ONLY)
+  "${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR}/switchwireConfigVersion.cmake" @ONLY)
 configure_file(Useswitchwire.cmake.in
-  "${PROJECT_BINARY_DIR}/lib/Useswitchwire.cmake" @ONLY)
+  "${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR}/Useswitchwire.cmake" @ONLY)
 
 # Install the export set for use with the install-tree
-install(EXPORT switchwire-targets DESTINATION lib)
+install(EXPORT switchwire-targets DESTINATION ${CMAKE_INSTALL_LIBDIR})
 
 include( CMakePackageConfigHelpers )
 # Create the switchwireConfig.cmake and switchwireConfigVersion files
-file(RELATIVE_PATH CONF_REL_INCLUDE_DIR "${CMAKE_INSTALL_PREFIX}/lib"
+file(RELATIVE_PATH CONF_REL_INCLUDE_DIR "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}"
    "${CMAKE_INSTALL_PREFIX}/include")
 
 configure_package_config_file( 
-    switchwireConfig.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/lib/switchwireConfig.cmake
-    INSTALL_DESTINATION lib
+    switchwireConfig.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR}/switchwireConfig.cmake
+    INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}
     PATH_VARS CONF_REL_INCLUDE_DIR )
 
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/lib/switchwireConfig.cmake 
-              ${CMAKE_CURRENT_BINARY_DIR}/lib/switchwireConfigVersion.cmake
-              ${CMAKE_CURRENT_BINARY_DIR}/lib/Useswitchwire.cmake
-        DESTINATION lib )
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR}/switchwireConfig.cmake 
+              ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR}/switchwireConfigVersion.cmake
+              ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR}/Useswitchwire.cmake
+        DESTINATION ${CMAKE_INSTALL_LIBDIR} )
 
 #
 # Setup the fpc auto detection files
@@ -160,9 +145,9 @@ else(WIN32)
 endif(WIN32)
 
 configure_file(extra/switchwire.fpc.in
-  "${PROJECT_BINARY_DIR}/lib/flagpoll/switchwire.fpc" @ONLY)
+  "${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR}/flagpoll/switchwire.fpc" @ONLY)
 
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/lib/flagpoll/switchwire.fpc
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR}/flagpoll/switchwire.fpc
         DESTINATION lib/flagpoll )
 
 
