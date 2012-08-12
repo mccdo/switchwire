@@ -8,6 +8,7 @@ set(switchwire_MAJOR_VERSION 0)
 set(switchwire_MINOR_VERSION 2)
 set(switchwire_SUB_VERSION 0)
 set(switchwire_VERSION ${switchwire_MAJOR_VERSION}.${switchwire_MINOR_VERSION}.${switchwire_SUB_VERSION})
+set(VES_PACKAGE_VERSION ${switchwire_VERSION})
 
 set( POCO_ROOT "Please specify" CACHE PATH "Root directory where POCO is installed" )
 FIND_PACKAGE(POCO 1.4.1 REQUIRED COMPONENTS PocoFoundation PocoUtil PocoData PocoDataSQLite)
@@ -47,22 +48,7 @@ IF(WIN32)
     ENDIF(MSVC)
 ENDIF (WIN32)
 
-if(CMAKE_COMPILER_IS_GNUCXX)
-    include(GNUInstallDirs)
-endif(CMAKE_COMPILER_IS_GNUCXX)
-
-if(NOT DEFINED CMAKE_INSTALL_LIBDIR)
-  set(CMAKE_INSTALL_LIBDIR lib)
-endif(NOT DEFINED CMAKE_INSTALL_LIBDIR)
-
-set(INSTALL_INCDIR include)
-set(INSTALL_BINDIR bin)
-set(INSTALL_ARCHIVEDIR ${CMAKE_INSTALL_LIBDIR})
-if(WIN32)
-    SET(INSTALL_LIBDIR bin)
-else(WIN32)
-    SET(INSTALL_LIBDIR ${CMAKE_INSTALL_LIBDIR})
-endif(WIN32)
+include(VESBinAndLibDirs)
 
 add_subdirectory(src)
 
@@ -85,64 +71,10 @@ add_subdirectory(src)
 #    add_subdirectory( doc/images )
 #endif()
 
-# On windows provide the user with the pdb files 
-# for debugging if they are present
-if(MSVC)
-    install(
-        DIRECTORY ${PROJECT_BINARY_DIR}/lib/\${CMAKE_INSTALL_CONFIG_NAME}/
-        DESTINATION ${CMAKE_INSTALL_LIBDIR}
-        USE_SOURCE_PERMISSIONS
-        COMPONENT Development
-        FILES_MATCHING PATTERN "*.pdb"
-    )
-endif(MSVC)
+include(VESInstallPDBFiles)
 
-# Install the CMake find script for switchwire
-install( FILES "extra/Findswitchwire.cmake"
-    DESTINATION "share/${CMAKE_PROJECT_NAME}/extra"
-    COMPONENT Development
-)
-
-#
-# Create and install all of the auto find tools
-# =============================================
-
-# Add all targets to the build-tree export set
-export(TARGETS eventmanager
-  FILE "${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR}/switchwireLibraryDepends.cmake")
-
-# Export the package for use from the build-tree
-# (this registers the build-tree with a global CMake-registry)
-export(PACKAGE switchwire)
-
-# Create a switchwireBuildTreeSettings.cmake file for the use from the build tree
-configure_file(switchwireBuildTreeSettings.cmake.in
-  "${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR}/switchwireBuildTreeSettings.cmake" @ONLY)
-
-#configure_file(switchwireConfig.cmake.in
-#  "${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR}/switchwireConfig.cmake" @ONLY)
-configure_file(switchwireConfigVersion.cmake.in
-  "${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR}/switchwireConfigVersion.cmake" @ONLY)
-configure_file(Useswitchwire.cmake.in
-  "${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR}/Useswitchwire.cmake" @ONLY)
-
-# Install the export set for use with the install-tree
-install(EXPORT switchwire-targets DESTINATION ${CMAKE_INSTALL_LIBDIR})
-
-include( CMakePackageConfigHelpers )
-# Create the switchwireConfig.cmake and switchwireConfigVersion files
-file(RELATIVE_PATH CONF_REL_INCLUDE_DIR "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}"
-   "${CMAKE_INSTALL_PREFIX}/include")
-
-configure_package_config_file( 
-    switchwireConfig.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR}/switchwireConfig.cmake
-    INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    PATH_VARS CONF_REL_INCLUDE_DIR CMAKE_INSTALL_LIBDIR)
-
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR}/switchwireConfig.cmake 
-              ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR}/switchwireConfigVersion.cmake
-              ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR}/Useswitchwire.cmake
-        DESTINATION ${CMAKE_INSTALL_LIBDIR} )
+set(VES_EXPORT_LIBRARY_TARGETS eventmanager)
+set(VES_CONFIGURE_VARS CMAKE_INSTALL_LIBDIR)
 
 #
 # Setup the fpc auto detection files
@@ -154,10 +86,4 @@ else(WIN32)
     set(switchwire_FPC_LIBRARIES "-L\${libdir} -leventmanager")
 endif(WIN32)
 
-configure_file(extra/switchwire.fpc.in
-  "${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR}/flagpoll/switchwire.fpc" @ONLY)
-
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR}/flagpoll/switchwire.fpc
-        DESTINATION ${CMAKE_INSTALL_LIBDIR}/flagpoll )
-
-
+include(VESInstallAutoDiscoveryTools)
