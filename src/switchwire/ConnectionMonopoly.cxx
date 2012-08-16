@@ -30,45 +30,28 @@
  * -----------------------------------------------------------------
  *
  *************** <auto-copyright.rb END do not edit this line> ***************/
-#pragma once
 
-#include <eventmanager/Event.h>
+#include <switchwire/ConnectionMonopoly.h>
 
 
-#include <vector>
-#include <string>
-
-/** @file Event.h
-  * This file contains a group of typedefs defining common signal types by
-  * a memorable name. We use this strategy in our application code to make
-  * event declarations more compact and readable.
-  **/
-/// @namespace eventmanager
-namespace eventmanager
+namespace switchwire
 {
-    ///Signal with no arguments and no returns
-    typedef Event< void () > VoidSignal_type;
 
-    ///Signal for a String
-    typedef Event< void ( std::string const& ) > StringSignal_type;
-    typedef Event< void ( std::string const&, std::string const& ) > TwoStringSignal_type;
-    typedef Event< void ( std::string const&, std::string const&, std::string const& ) > ThreeStringSignal_type;
-
-    ///Signal for a bool
-    typedef Event< void ( bool const& ) > BoolSignal_type;
-
-    ///Signal for double
-    typedef Event< void ( double const& ) > DoubleSignal_type;
-    typedef Event< void ( double const&, double const& ) > TwoDoubleSignal_type;
-    typedef Event< void ( double const&, double const&, double const& ) > ThreeDoubleSignal_type;
-
-    ///Signal for int
-    typedef Event< void ( int const& ) > IntSignal_type;
-    
-    ///Signal for bools and vectors
-    typedef Event< void ( const bool, const std::vector< double >&  ) > BoolAndDoubleVectorSignal_type;
-
+ConnectionMonopoly::ConnectionMonopoly( )
+{
 }
 
+ConnectionMonopoly::~ConnectionMonopoly( )
+{
+    // When this object is destroyed, mBlockers will go out of scope, which should
+    // cause all the shared pointers to shared_connection_block(s) to go out of
+    // scope and autodelete.
+}
 
+void ConnectionMonopoly::AddBlocker( boost::shared_ptr< boost::signals2::shared_connection_block > blocker )
+{
+    mBlockers.push_back( blocker );
+}
+
+}
 

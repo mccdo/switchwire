@@ -32,35 +32,43 @@
  *************** <auto-copyright.rb END do not edit this line> ***************/
 #pragma once
 
+#include <switchwire/Event.h>
 
 
-namespace eventmanager
+#include <vector>
+#include <string>
+
+/** @file Event.h
+  * This file contains a group of typedefs defining common signal types by
+  * a memorable name. We use this strategy in our application code to make
+  * event declarations more compact and readable.
+  **/
+/// @namespace switchwire
+namespace switchwire
 {
-/// @file BooleanPropagationCombiner.h
-/// @namespace eventmanager
-/// @class BooleanPropagationCombiner
-/// Custom combiner for signals that accept a boolean return value. Propagation
-/// of the signal stops when a slot returns @c true. This can be used to
-/// set up hierachichal chains of slots in which one slot can sink the signal
-/// so that all slots below it in the hierarchy don't get called.
-struct EVENTMANAGER_EXPORT BooleanPropagationCombiner {
-typedef bool result_type; // This typedef is req'd by boost::signals2 combiner
-                          // interface.
+    ///Signal with no arguments and no returns
+    typedef Event< void () > VoidSignal_type;
 
-template<typename InputIterator>
-result_type operator()(InputIterator first, InputIterator last) const
-{
-    while (first != last)
-    {
-        if (result_type sinkEvent = *first)
-        {
-            return sinkEvent;
-        }
+    ///Signal for a String
+    typedef Event< void ( std::string const& ) > StringSignal_type;
+    typedef Event< void ( std::string const&, std::string const& ) > TwoStringSignal_type;
+    typedef Event< void ( std::string const&, std::string const&, std::string const& ) > ThreeStringSignal_type;
 
-        ++first;
-    }
-    return false;
+    ///Signal for a bool
+    typedef Event< void ( bool const& ) > BoolSignal_type;
+
+    ///Signal for double
+    typedef Event< void ( double const& ) > DoubleSignal_type;
+    typedef Event< void ( double const&, double const& ) > TwoDoubleSignal_type;
+    typedef Event< void ( double const&, double const&, double const& ) > ThreeDoubleSignal_type;
+
+    ///Signal for int
+    typedef Event< void ( int const& ) > IntSignal_type;
+    
+    ///Signal for bools and vectors
+    typedef Event< void ( const bool, const std::vector< double >&  ) > BoolAndDoubleVectorSignal_type;
+
 }
-};
 
-} // namespace eventmanager
+
+

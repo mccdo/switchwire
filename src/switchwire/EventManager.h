@@ -43,14 +43,14 @@
 
 #include <Poco/SingletonHolder.h>
 
-#include <eventmanager/Event.h>
-#include <eventmanager/ScopedConnectionList.h>
-#include <eventmanager/ConnectionMonopoly.h>
-#include <eventmanager/SlotWrapper.h>
+#include <switchwire/Event.h>
+#include <switchwire/ScopedConnectionList.h>
+#include <switchwire/ConnectionMonopoly.h>
+#include <switchwire/SlotWrapper.h>
 
-#include <eventmanager/Exports.h>
+#include <switchwire/Exports.h>
 
-#include <eventmanager/Logging.h>
+#include <switchwire/Logging.h>
 
 namespace Poco
 {
@@ -60,10 +60,10 @@ class Session;
 }
 }
 
-namespace eventmanager
+namespace switchwire
 {
 /// @file EventManager.h
-/// @namespace eventmanager
+/// @namespace switchwire
 /** @class EventManager
  * EventManager provides a centralized place to manage and connect
  * signals (events) and slots based on the boost::signals2 library.
@@ -102,11 +102,11 @@ namespace eventmanager
  *
  * The documentation for this library uses the terms and concepts "signal" and
  * "event" more or less interchangeably. When we refer to an "Event", however,
- * we are specifically referring to the class \c eventmanager::Event.
+ * we are specifically referring to the class \c switchwire::Event.
  * That name was chosen to avoid confusion with the class
  * \c boost::signals2::signal.
 **/
-class EVENTMANAGER_EXPORT EventManager
+class SWITCHWIRE_EXPORT EventManager
 {
 public:
 
@@ -429,5 +429,5 @@ private:
 };
 
 
-} // namespace eventmanager
+} // namespace switchwire
 

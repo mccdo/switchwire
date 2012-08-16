@@ -33,8 +33,8 @@
 #pragma once
 #include <boost/signals2/signal.hpp>
 #include <boost/mem_fn.hpp>
-#include <eventmanager/ScopedConnectionList.h>
-#include <eventmanager/EventManager.h>
+#include <switchwire/ScopedConnectionList.h>
+#include <switchwire/EventManager.h>
 
 /*
  * Notes:
@@ -60,8 +60,8 @@
  */
 
 /// @file ConnectSignals.h
-/// @namespace eventmanager
-namespace eventmanager
+/// @namespace switchwire
+namespace switchwire
 {
 ////////////////////////////////////////////////////////////////////////////////
 /**
@@ -80,9 +80,9 @@ namespace eventmanager
   *                    lifetime of the connection. Once this object goes out of
   *                    scope, the connections it holds are broken.
   * @param signalType The type of signal to which you want to connect. If in
-  *                   doubt, use \c eventmanager::EventManager::any_SignalType.
+  *                   doubt, use \c switchwire::EventManager::any_SignalType.
   * @param priority The priority with which to connect to the signal. Use
-  *                 \c eventmanager::EventManager::normal_Priority unless you
+  *                 \c switchwire::EventManager::normal_Priority unless you
   *                 specifically need something else.
   */
 template <typename Signature>
@@ -174,9 +174,9 @@ void ConnectSignalsCombiner_0( const std::string& name,
   *                    lifetime of the connection. Once this object goes out of
   *                    scope, the connections it holds are broken.
   * @param signalType The type of signal to which you want to connect. If in
-  *                   doubt, use \c eventmanager::EventManager::any_SignalType.
+  *                   doubt, use \c switchwire::EventManager::any_SignalType.
   * @param priority The priority with which to connect to the signal. Use
-  *                 \c eventmanager::EventManager::normal_Priority unless you
+  *                 \c switchwire::EventManager::normal_Priority unless you
   *                 specifically need something else.
   *
   * @note If you need to deal with signals/slots with more than five parameters,

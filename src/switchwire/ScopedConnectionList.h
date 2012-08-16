@@ -38,13 +38,13 @@
 
 #include<list>
 
-#include <eventmanager/Exports.h>
+#include <switchwire/Exports.h>
 
 
-namespace eventmanager
+namespace switchwire
 {
 /// @file ScopedConnectionList.h
-/// @namespace eventmanager
+/// @namespace switchwire
 /** @class ScopedConnectionList
  * ScopedConnectionList is essentially a smart container for boost::signals2::scoped_connection
  * objects. It provides an easy way for another class to keep a set of scoped_connectionS
@@ -80,7 +80,7 @@ namespace eventmanager
  * ScopedConnectionList was inspired by the similarly-named class used by the
  * ardour project. See http://www.ardour.org
  **/
-class EVENTMANAGER_EXPORT ScopedConnectionList
+class SWITCHWIRE_EXPORT ScopedConnectionList
 {
 public:
     /// Easy way to refer to the internal list type.

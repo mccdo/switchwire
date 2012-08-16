@@ -37,10 +37,10 @@
 #include<boost/signals2/signal.hpp>
 
 
-namespace eventmanager
+namespace switchwire
 {
 /// @file SlotWrapperBase.h
-/// @namespace eventmanager
+/// @namespace switchwire
 /** @class SlotWrapperBae
   * Base class for templated SlotWrapper.
   * Existence of a base class allows disparate instances of SlotWrapper<> to be

@@ -30,44 +30,37 @@
  * -----------------------------------------------------------------
  *
  *************** <auto-copyright.rb END do not edit this line> ***************/
-#include <eventmanager/InteractionEvent.h>
+#pragma once
 
 
-namespace eventmanager
+
+namespace switchwire
 {
-////////////////////////////////////////////////////////////////////////////////
-InteractionEvent::InteractionEvent( eventType eType,
-                                    int key,
-                                    const char keyChar,
-                                    const wchar_t keyUnicode,
-                                    int modifiers,
-                                    buttonType button,
-                                    int buttons,
-                                    float scrollDeltaX,
-                                    float scrollDeltaZ,
-                                    double x,
-                                    double y,
-                                    double z ):
-    EventType( eType ),
-    Key( key ),
-    KeyChar( keyChar ),
-    KeyUnicode( keyUnicode ),
-    Modifiers( modifiers ),
-    Button( button ),
-    Buttons( buttons ),
-    ScrollDeltaX( scrollDeltaX ),
-    ScrollDeltaZ( scrollDeltaZ ),
-    X( x ),
-    Y( y ),
-    Z( z )
+/// @file BooleanPropagationCombiner.h
+/// @namespace switchwire
+/// @class BooleanPropagationCombiner
+/// Custom combiner for signals that accept a boolean return value. Propagation
+/// of the signal stops when a slot returns @c true. This can be used to
+/// set up hierachichal chains of slots in which one slot can sink the signal
+/// so that all slots below it in the hierarchy don't get called.
+struct SWITCHWIRE_EXPORT BooleanPropagationCombiner {
+typedef bool result_type; // This typedef is req'd by boost::signals2 combiner
+                          // interface.
+
+template<typename InputIterator>
+result_type operator()(InputIterator first, InputIterator last) const
 {
-   ;
+    while (first != last)
+    {
+        if (result_type sinkEvent = *first)
+        {
+            return sinkEvent;
+        }
+
+        ++first;
+    }
+    return false;
 }
-////////////////////////////////////////////////////////////////////////////////
-InteractionEvent::~InteractionEvent()
-{
-    ;
-}
-////////////////////////////////////////////////////////////////////////////////
-} // namespace eventmanager
+};
 
+} // namespace switchwire

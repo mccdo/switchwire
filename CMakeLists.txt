@@ -73,17 +73,17 @@ add_subdirectory(src)
 
 include(VESInstallPDBFiles)
 
-set(VES_EXPORT_LIBRARY_TARGETS eventmanager)
+set(VES_EXPORT_LIBRARY_TARGETS switchwire)
 set(VES_CONFIGURE_VARS CMAKE_INSTALL_LIBDIR)
 
 #
 # Setup the fpc auto detection files
 if(WIN32)
-    set(switchwire_FPC_LIBRARIES "/libpath:\"\${libdir}\" eventmanager.lib")
+    set(switchwire_FPC_LIBRARIES "/libpath:\"\${libdir}\" switchwire.lib")
     set(switchwire_FPC_INCLUDES "/I\"\${includedir}\"")
 else(WIN32)
     set(switchwire_FPC_INCLUDES "-I\${includedir}")
-    set(switchwire_FPC_LIBRARIES "-L\${libdir} -leventmanager")
+    set(switchwire_FPC_LIBRARIES "-L\${libdir} -lswitchwire")
 endif(WIN32)
 
 include(VESInstallAutoDiscoveryTools)

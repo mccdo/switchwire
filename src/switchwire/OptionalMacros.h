@@ -17,16 +17,16 @@
         sig_type::slot_type* slotFunctor = new sig_type::slot_type(
 
 #define CONNECTSIGNALPOST  ); \
-                eventmanager::SlotWrapper< sig_type >* slotWrapper = new eventmanager::SlotWrapper< sig_type >( slotFunctor );
+                switchwire::SlotWrapper< sig_type >* slotWrapper = new switchwire::SlotWrapper< sig_type >( slotFunctor );
 
 #define CONNECTSIGNALCALL( name, connections, priority ) \
-        eventmanager::EventManager::instance()->ConnectSignal( name, slotWrapper, \
-            connections, eventmanager::EventManager::priority ); \
+        switchwire::EventManager::instance()->ConnectSignal( name, slotWrapper, \
+            connections, switchwire::EventManager::priority ); \
         }while(0)
 
 #define CONNECTSIGNALSCALL( name, connections, type, priority ) \
-        eventmanager::EventManager::instance()->ConnectSignals( name, slotWrapper, \
-            connections, eventmanager::EventManager::type, eventmanager::EventManager::priority ); \
+        switchwire::EventManager::instance()->ConnectSignals( name, slotWrapper, \
+            connections, switchwire::EventManager::type, switchwire::EventManager::priority ); \
         }while(0)
 
 #define CONNECT____0( signature, slot ) CONNECTSIGNALPRE( signature ) boost::bind( slot, boost::ref( *this ) ) CONNECTSIGNALPOST

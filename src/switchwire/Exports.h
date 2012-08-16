@@ -30,28 +30,35 @@
  * -----------------------------------------------------------------
  *
  *************** <auto-copyright.rb END do not edit this line> ***************/
+#pragma once
 
-#include <eventmanager/ConnectionMonopoly.h>
+#if defined(_MSC_VER)
+#pragma warning( disable : 4503 )
+#pragma warning( disable : 4251 )
+#endif
 
-
-namespace eventmanager
-{
-
-ConnectionMonopoly::ConnectionMonopoly( )
-{
-}
-
-ConnectionMonopoly::~ConnectionMonopoly( )
-{
-    // When this object is destroyed, mBlockers will go out of scope, which should
-    // cause all the shared pointers to shared_connection_block(s) to go out of
-    // scope and autodelete.
-}
-
-void ConnectionMonopoly::AddBlocker( boost::shared_ptr< boost::signals2::shared_connection_block > blocker )
-{
-    mBlockers.push_back( blocker );
-}
-
-}
-
+#if defined(_MSC_VER) || defined(__CYGWIN__) || defined(__MINGW32__) || defined( __BCPLUSPLUS__)  || defined( __MWERKS__)
+    #  if defined( SWITCHWIRE_LIBRARY_STATIC )
+    #    define SWITCHWIRE_EXPORT
+    #    define SWITCHWIRE_LOCAL
+    #  elif defined( SWITCHWIRE_LIBRARY )
+    #    define SWITCHWIRE_EXPORT   __declspec(dllexport)
+    #    define SWITCHWIRE_LOCAL
+    #  else
+    #    define SWITCHWIRE_EXPORT   __declspec(dllimport)
+    #    define SWITCHWIRE_LOCAL
+    #  endif
+#else
+  #if __GNUC__ >= 4
+    # if defined( SWITCHWIRE_LIBRARY_STATIC )
+    #    define SWITCHWIRE_EXPORT
+    #    define SWITCHWIRE_LOCAL
+    # else
+    #    define SWITCHWIRE_EXPORT   __attribute__ ((visibility ("default")))
+    #    define SWITCHWIRE_LOCAL   __attribute__ ((visibility ("hidden")))
+    # endif
+  #else
+    #  define SWITCHWIRE_EXPORT
+    #  define SWITCHWIRE_LOCAL
+  #endif
+#endif

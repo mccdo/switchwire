@@ -4,14 +4,14 @@
 #include<boost/shared_ptr.hpp>
 #include<boost/weak_ptr.hpp>
 
-#include <eventmanager/EventBase.h>
-#include <eventmanager/SlotWrapper.h>
-#include <eventmanager/ScopedConnectionList.h>
+#include <switchwire/EventBase.h>
+#include <switchwire/SlotWrapper.h>
+#include <switchwire/ScopedConnectionList.h>
 
-namespace eventmanager
+namespace switchwire
 {
 /// @file Event.h
-/// @namespace eventmanager
+/// @namespace switchwire
 /** @class Event
   * A manageable event (signal). You should never need to use any of the
   * functions here besides the constructor and the signal() operator. To declare

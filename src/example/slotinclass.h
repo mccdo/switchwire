@@ -1,7 +1,7 @@
 #pragma once
 #include <iostream>
-#include <eventmanager/ConnectSignals.h>
-#include <eventmanager/ScopedConnectionList.h>
+#include <switchwire/ConnectSignals.h>
+#include <switchwire/ScopedConnectionList.h>
 
 class SlotInClass
 {
@@ -13,13 +13,13 @@ public:
         // object that owns "ATestEvent". All we need to know is the name of the
         // event and its signature.
 
-        eventmanager::ConnectSignals_1< void (int), SlotInClass >(
+        switchwire::ConnectSignals_1< void (int), SlotInClass >(
                     "ATestEvent",
                     &SlotInClass::mySlot,
                     this,
                     m_connections,
-                    eventmanager::EventManager::any_SignalType,
-                    eventmanager::EventManager::normal_Priority );
+                    switchwire::EventManager::any_SignalType,
+                    switchwire::EventManager::normal_Priority );
 
         // Key points to notice in the above call:
         // * The template function name includes the number of arguments the
@@ -36,6 +36,6 @@ public:
         std::cout << "SlotInClass::mySlot: argument = " << arg << std::endl;
     }
 
-    eventmanager::ScopedConnectionList m_connections;
+    switchwire::ScopedConnectionList m_connections;
 };
 

@@ -36,7 +36,7 @@
 #include <boost/weak_ptr.hpp>
 #include <boost/scoped_ptr.hpp>
 
-namespace eventmanager
+namespace switchwire
 {
 // ClassPtrDef is the regular ptr class to use.
 template

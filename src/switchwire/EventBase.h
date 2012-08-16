@@ -1,24 +1,24 @@
 #pragma once
 
 #include<boost/signals2/signal.hpp>
-#include <eventmanager/Exports.h>
-#include <eventmanager/SlotWrapperBase.h>
-#include <eventmanager/ScopedConnectionList.h>
+#include <switchwire/Exports.h>
+#include <switchwire/SlotWrapperBase.h>
+#include <switchwire/ScopedConnectionList.h>
 
-namespace eventmanager
+namespace switchwire
 {
 struct null_deleter
 {
     void operator()( void* ) {}
 };
 /// @file EventBase.h
-/// @namespace eventmanager
+/// @namespace switchwire
 /** @class EventBase
   * Base class for templated Event<> class. Mainly for internal use in the
-  * eventmanager library. Applications generally should not need to use this
+  * switchwire library. Applications generally should not need to use this
   * class explicitly.
   **/
-class EVENTMANAGER_EXPORT EventBase
+class SWITCHWIRE_EXPORT EventBase
 {
 public:
     EventBase(): this_(this, null_deleter()){}
@@ -76,4 +76,4 @@ private:
 
 };
 
-} // namespace eventmanager
+} // namespace switchwire

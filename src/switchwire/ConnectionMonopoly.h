@@ -36,13 +36,13 @@
 #include<boost/signals2/shared_connection_block.hpp>
 #include<boost/shared_ptr.hpp>
 
-#include <eventmanager/Exports.h>
+#include <switchwire/Exports.h>
 
 
-namespace eventmanager
+namespace switchwire
 {
 /// @file ConnectionMonopoly.h
-/// @namespace eventmanager
+/// @namespace switchwire
 /** @class ConnectionMonopoly
  * A shared_ptr to a ConnectionMonopoly is returned by calls to either of the variants of
  *  EventManager::MonopolizeConnection[] and holds a list of shared_connection_block objects.
@@ -59,7 +59,7 @@ namespace eventmanager
  * enforce this behavior by returning a shared_ptr to a ConnectionMonopoly rather
  * than a raw ConnectionMonopoly.
  */
-class EVENTMANAGER_EXPORT ConnectionMonopoly
+class SWITCHWIRE_EXPORT ConnectionMonopoly
 {
 public:
     ///

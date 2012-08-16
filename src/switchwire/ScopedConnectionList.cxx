@@ -30,10 +30,10 @@
  * -----------------------------------------------------------------
  *
  *************** <auto-copyright.rb END do not edit this line> ***************/
-#include <eventmanager/ScopedConnectionList.h>
+#include <switchwire/ScopedConnectionList.h>
 
 
-namespace eventmanager
+namespace switchwire
 {
 struct null_deleter
 {

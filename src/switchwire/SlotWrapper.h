@@ -33,14 +33,14 @@
 
 #pragma once
 
-#include <eventmanager/SlotWrapperBase.h>
+#include <switchwire/SlotWrapperBase.h>
 #include <stdio.h>
 
 
-namespace eventmanager
+namespace switchwire
 {
 /// @file SlotWrapper.h
-/// @namespace eventmanager
+/// @namespace switchwire
 /** @class SlotWrapper
  * SlotWrapper provides a wrapper around a slot, allowing slots with different
  * types (signatures) to be passed into the same function and to be held in

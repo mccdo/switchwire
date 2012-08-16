@@ -35,7 +35,7 @@
 #include <Poco/Data/DataException.h>
 #include <Poco/SingletonHolder.h>
 
-#include <eventmanager/EventManager.h>
+#include <switchwire/EventManager.h>
 
 #include <iostream>
 
@@ -45,7 +45,7 @@ using boost::signals2::scoped_connection;
 using boost::signals2::shared_connection_block;
 
 
-namespace eventmanager
+namespace switchwire
 {
 
 namespace
@@ -483,5 +483,5 @@ shared_ptr< ConnectionMonopoly > EventManager::MonopolizeConnectionStrong( share
     return monopoly;
 }
 ////////////////////////////////////////////////////////////////////////////////
-} // namespace eventmanager
+} // namespace switchwire
 

@@ -38,11 +38,11 @@
 #include <Poco/Logger.h>
 #include <Poco/LogStream.h>
 
-#include <eventmanager/PointerTypes.h>
+#include <switchwire/PointerTypes.h>
 
 // Smart pointer-ized version of LogStream to automate memory management
 
-namespace eventmanager
+namespace switchwire
 {
 /// Typedef for the SmartPtr types.
 typedef ClassPtrDef<Poco::LogStream>::type  LogStreamPtr;
@@ -77,10 +77,10 @@ typedef ClassPtrDef<Poco::LogStream>::type  LogStreamPtr;
 #define STATIC_LOG_INFO( name, msg ) _STATIC_LOG_CALL( information, name, msg )
 
 
-// DEBUG and TRACE log messages will only be compiled in when EVENTMANAGER_DEBUG
+// DEBUG and TRACE log messages will only be compiled in when SWITCHWIRE_DEBUG
 // is defined. This allows the liberal use of DEBUG and TRACE messages to
 // track down difficult bugs without affecting performace of production builds.
-#if defined(EVENTMANAGER_DEBUG)
+#if defined(SWITCHWIRE_DEBUG)
     #define LOG_DEBUG( msg ) _LOG_CALL( debug, msg )
     #define LOG_TRACE( msg ) _LOG_CALL( trace, msg )
     #define STATIC_LOG_DEBUG( name, msg ) _STATIC_LOG_CALL( debug, name, msg )

@@ -32,16 +32,16 @@
  *************** <auto-copyright.rb END do not edit this line> ***************/
 #pragma once
 
-#include <eventmanager/Exports.h>
+#include <switchwire/Exports.h>
 
 
-namespace eventmanager
+namespace switchwire
 {
 /// @file InteractionEvent.h
-/// @namespace eventmanager
+/// @namespace switchwire
 /** @class InteractionEvent
   * A class that can be used to express keyboard and mouse events compactly.
-  * The eventmanager library does use this internally, but we provide it here
+  * The switchwire library does use this internally, but we provide it here
   * for application developers since custom handling of mouse and keyboard
   * events is a common application requirement. This class is intended to be
   * used as the argument to a signal that passes around keyboard and mouse
@@ -49,7 +49,7 @@ namespace eventmanager
   * you to easily mimick the common practice of sinking keyboard and mouse
   * events in certain classes.
   **/
-class EVENTMANAGER_EXPORT InteractionEvent
+class SWITCHWIRE_EXPORT InteractionEvent
 {
 public:
 
@@ -109,5 +109,5 @@ public:
 private:
 
 };
-} //end eventmanager
+} //end switchwire
 

@@ -30,35 +30,44 @@
  * -----------------------------------------------------------------
  *
  *************** <auto-copyright.rb END do not edit this line> ***************/
-#pragma once
+#include <switchwire/InteractionEvent.h>
 
-#if defined(_MSC_VER)
-#pragma warning( disable : 4503 )
-#pragma warning( disable : 4251 )
-#endif
 
-#if defined(_MSC_VER) || defined(__CYGWIN__) || defined(__MINGW32__) || defined( __BCPLUSPLUS__)  || defined( __MWERKS__)
-    #  if defined( EVENTMANAGER_LIBRARY_STATIC )
-    #    define EVENTMANAGER_EXPORT
-    #    define EVENTMANAGER_LOCAL
-    #  elif defined( EVENTMANAGER_LIBRARY )
-    #    define EVENTMANAGER_EXPORT   __declspec(dllexport)
-    #    define EVENTMANAGER_LOCAL
-    #  else
-    #    define EVENTMANAGER_EXPORT   __declspec(dllimport)
-    #    define EVENTMANAGER_LOCAL
-    #  endif
-#else
-  #if __GNUC__ >= 4
-    # if defined( EVENTMANAGER_LIBRARY_STATIC )
-    #    define EVENTMANAGER_EXPORT
-    #    define EVENTMANAGER_LOCAL
-    # else
-    #    define EVENTMANAGER_EXPORT   __attribute__ ((visibility ("default")))
-    #    define EVENTMANAGER_LOCAL   __attribute__ ((visibility ("hidden")))
-    # endif
-  #else
-    #  define EVENTMANAGER_EXPORT
-    #  define EVENTMANAGER_LOCAL
-  #endif
-#endif
+namespace switchwire
+{
+////////////////////////////////////////////////////////////////////////////////
+InteractionEvent::InteractionEvent( eventType eType,
+                                    int key,
+                                    const char keyChar,
+                                    const wchar_t keyUnicode,
+                                    int modifiers,
+                                    buttonType button,
+                                    int buttons,
+                                    float scrollDeltaX,
+                                    float scrollDeltaZ,
+                                    double x,
+                                    double y,
+                                    double z ):
+    EventType( eType ),
+    Key( key ),
+    KeyChar( keyChar ),
+    KeyUnicode( keyUnicode ),
+    Modifiers( modifiers ),
+    Button( button ),
+    Buttons( buttons ),
+    ScrollDeltaX( scrollDeltaX ),
+    ScrollDeltaZ( scrollDeltaZ ),
+    X( x ),
+    Y( y ),
+    Z( z )
+{
+   ;
+}
+////////////////////////////////////////////////////////////////////////////////
+InteractionEvent::~InteractionEvent()
+{
+    ;
+}
+////////////////////////////////////////////////////////////////////////////////
+} // namespace switchwire
+
