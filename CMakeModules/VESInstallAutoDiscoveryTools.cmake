@@ -43,6 +43,12 @@ install(FILES "${PROJECT_BINARY_DIR}/Find${CMAKE_PROJECT_NAME}.cmake"
 # Install the export set for use with the install-tree
 install(EXPORT ${CMAKE_PROJECT_NAME}-targets DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT development)
 
+#setup the fpc variables for the fpc file creation
+set(VES_FPC_PREFIX "\${fp_file_cwd}/../..")
+if(CMAKE_LIBRARY_ARCHITECTURE)
+    set(VES_FPC_PREFIX "\${fp_file_cwd}/../../..")
+endif(CMAKE_LIBRARY_ARCHITECTURE)
+
 configure_file(extra/${CMAKE_PROJECT_NAME}.fpc.in
   "${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR}/flagpoll/${CMAKE_PROJECT_NAME}.fpc" @ONLY)
 
