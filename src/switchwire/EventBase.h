@@ -28,7 +28,7 @@ public:
     {
         ;    
     }
-    EventBase& operator=(EventBase const & rhs)
+    EventBase& operator=(EventBase const&)
     {
         return *this;
     }
