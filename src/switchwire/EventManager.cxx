@@ -61,7 +61,7 @@ EventManager* EventManager::instance()
 ////////////////////////////////////////////////////////////////////////////////
 EventManager::EventManager():
     mMonotonicID(0),
-    m_logger( Poco::Logger::get("EventManager") )
+    m_logger( Poco::Logger::get("switchwire::EventManager") )
 {
     m_logStream = LogStreamPtr( new Poco::LogStream( m_logger ) );
 
