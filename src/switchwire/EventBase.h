@@ -21,13 +21,17 @@ struct null_deleter
 class SWITCHWIRE_EXPORT EventBase
 {
 public:
-    EventBase(): this_(this, null_deleter()){}
-    EventBase( const EventBase& )
-        : 
-        this_(this, null_deleter())
+    ///Default constructor
+    EventBase()
     {
-        ;    
+        this_ = boost::shared_ptr< EventBase >(this, null_deleter());    
     }
+    ///Copy constructor
+    EventBase( const EventBase& )
+    {
+        this_ = boost::shared_ptr< EventBase >(this, null_deleter());    
+    }
+    ///Assignment operator
     EventBase& operator=(EventBase const&)
     {
         return *this;
