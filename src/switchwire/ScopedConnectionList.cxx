@@ -41,15 +41,13 @@ struct null_deleter
 };
 
 ScopedConnectionList::ScopedConnectionList()
-    :
-    this_(this, null_deleter())
 {
+    this_ = boost::shared_ptr< ScopedConnectionList >( this, null_deleter() );
 }
 
 ScopedConnectionList::ScopedConnectionList( const ScopedConnectionList& )
-    :
-    this_(this, null_deleter())
 {
+    this_ = boost::shared_ptr< ScopedConnectionList >( this, null_deleter() );
 }
 
 ScopedConnectionList::~ScopedConnectionList( )
