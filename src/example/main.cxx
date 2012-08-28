@@ -56,9 +56,9 @@ int main()
     switchwire::ConnectSignalsStatic<void (int)>(
                     "ATestEvent",
                     &prt,
-                    connections,
+                    connections/*,
                     switchwire::EventManager::any_SignalType,
-                    switchwire::EventManager::normal_Priority );
+                    switchwire::EventManager::normal_Priority*/ );
 
     // Instantiate a class with a valid slot that connects to "ATestEvent". Look
     // at the class's code to see how this works. Most applications will connect

@@ -89,8 +89,8 @@ template <typename Signature>
 void ConnectSignalsStatic( const std::string& name,
                        Signature* slotfunc,
                        ScopedConnectionList& connections,
-                       EventManager::SignalType signalType,
-                       EventManager::Priority priority )
+                       EventManager::SignalType signalType = EventManager::any_SignalType,
+                       EventManager::Priority priority = EventManager::normal_Priority )
 {
     typedef typename boost::signals2::signal< Signature > signalT;
     typename signalT::slot_type* slotFunctor;
@@ -113,8 +113,8 @@ template <typename Signature,
 void ConnectSignalsCombinerStatic( const std::string& name,
                        Signature* slotfunc,
                        ScopedConnectionList& connections,
-                       EventManager::SignalType signalType,
-                       EventManager::Priority priority )
+                       EventManager::SignalType signalType = EventManager::any_SignalType,
+                       EventManager::Priority priority = EventManager::normal_Priority )
 {
     typedef typename boost::signals2::signal< Signature, Combiner > signalT;
     typename signalT::slot_type* slotFunctor;
@@ -139,8 +139,8 @@ void ConnectSignalsCombiner_0( const std::string& name,
                        Signature (T::*slotfunc),
                        T* parentPtr,
                        ScopedConnectionList& connections,
-                       EventManager::SignalType signalType,
-                       EventManager::Priority priority )
+                       EventManager::SignalType signalType = EventManager::any_SignalType,
+                       EventManager::Priority priority = EventManager::normal_Priority )
 {
     typedef typename boost::signals2::signal< Signature, Combiner > signalT;
     typename signalT::slot_type* slotFunctor;
@@ -194,8 +194,8 @@ void ConnectSignals_0( const std::string& name,
                      Signature (T::*slotfunc),
                      T* parentPtr,
                      ScopedConnectionList& connections,
-                     EventManager::SignalType signalType,
-                     EventManager::Priority priority )
+                     EventManager::SignalType signalType = EventManager::any_SignalType,
+                     EventManager::Priority priority = EventManager::normal_Priority )
 {
     typedef typename boost::signals2::signal< Signature > signalT;
     typename signalT::slot_type* slotFunctor;
@@ -213,8 +213,8 @@ void ConnectSignalsCombiner_1( const std::string& name,
                        Signature (T::*slotfunc),
                        T* parentPtr,
                        ScopedConnectionList& connections,
-                       EventManager::SignalType signalType,
-                       EventManager::Priority priority )
+                       EventManager::SignalType signalType = EventManager::any_SignalType,
+                       EventManager::Priority priority = EventManager::normal_Priority )
 {
     typedef typename boost::signals2::signal< Signature, Combiner > signalT;
     typename signalT::slot_type* slotFunctor;
@@ -231,8 +231,8 @@ void ConnectSignals_1( const std::string& name,
                      Signature (T::*slotfunc),
                      T* parentPtr,
                      ScopedConnectionList& connections,
-                     EventManager::SignalType signalType,
-                     EventManager::Priority priority )
+                     EventManager::SignalType signalType = EventManager::any_SignalType,
+                     EventManager::Priority priority = EventManager::normal_Priority )
 {
     typedef typename boost::signals2::signal< Signature > signalT;
     typename signalT::slot_type* slotFunctor;
@@ -250,8 +250,8 @@ void ConnectSignalsCombiner_2( const std::string& name,
                        Signature (T::*slotfunc),
                        T* parentPtr,
                        ScopedConnectionList& connections,
-                       EventManager::SignalType signalType,
-                       EventManager::Priority priority )
+                       EventManager::SignalType signalType = EventManager::any_SignalType,
+                       EventManager::Priority priority = EventManager::normal_Priority )
 {
     typedef typename boost::signals2::signal< Signature, Combiner > signalT;
     typename signalT::slot_type* slotFunctor;
@@ -268,8 +268,8 @@ void ConnectSignals_2( const std::string& name,
                      Signature (T::*slotfunc),
                      T* parentPtr,
                      ScopedConnectionList& connections,
-                     EventManager::SignalType signalType,
-                     EventManager::Priority priority )
+                     EventManager::SignalType signalType = EventManager::any_SignalType,
+                     EventManager::Priority priority = EventManager::normal_Priority )
 {
     typedef typename boost::signals2::signal< Signature > signalT;
     typename signalT::slot_type* slotFunctor;
@@ -287,8 +287,8 @@ void ConnectSignalsCombiner_3( const std::string& name,
                        Signature (T::*slotfunc),
                        T* parentPtr,
                        ScopedConnectionList& connections,
-                       EventManager::SignalType signalType,
-                       EventManager::Priority priority )
+                       EventManager::SignalType signalType = EventManager::any_SignalType,
+                       EventManager::Priority priority = EventManager::normal_Priority )
 {
     typedef typename boost::signals2::signal< Signature, Combiner > signalT;
     typename signalT::slot_type* slotFunctor;
@@ -305,8 +305,8 @@ void ConnectSignals_3( const std::string& name,
                      Signature (T::*slotfunc),
                      T* parentPtr,
                      ScopedConnectionList& connections,
-                     EventManager::SignalType signalType,
-                     EventManager::Priority priority )
+                     EventManager::SignalType signalType = EventManager::any_SignalType,
+                     EventManager::Priority priority = EventManager::normal_Priority )
 {
     typedef typename boost::signals2::signal< Signature > signalT;
     typename signalT::slot_type* slotFunctor;
@@ -324,8 +324,8 @@ void ConnectSignalsCombiner_4( const std::string& name,
                        Signature (T::*slotfunc),
                        T* parentPtr,
                        ScopedConnectionList& connections,
-                       EventManager::SignalType signalType,
-                       EventManager::Priority priority )
+                       EventManager::SignalType signalType = EventManager::any_SignalType,
+                       EventManager::Priority priority = EventManager::normal_Priority )
 {
     typedef typename boost::signals2::signal< Signature, Combiner > signalT;
     typename signalT::slot_type* slotFunctor;
@@ -343,8 +343,8 @@ void ConnectSignals_4( const std::string& name,
                      Signature (T::*slotfunc),
                      T* parentPtr,
                      ScopedConnectionList& connections,
-                     EventManager::SignalType signalType,
-                     EventManager::Priority priority )
+                     EventManager::SignalType signalType = EventManager::any_SignalType,
+                     EventManager::Priority priority = EventManager::normal_Priority )
 {
     typedef typename boost::signals2::signal< Signature > signalT;
     typename signalT::slot_type* slotFunctor;
@@ -363,8 +363,8 @@ void ConnectSignalsCombiner_5( const std::string& name,
                        Signature (T::*slotfunc),
                        T* parentPtr,
                        ScopedConnectionList& connections,
-                       EventManager::SignalType signalType,
-                       EventManager::Priority priority )
+                       EventManager::SignalType signalType = EventManager::any_SignalType,
+                       EventManager::Priority priority = EventManager::normal_Priority )
 {
     typedef typename boost::signals2::signal< Signature, Combiner > signalT;
     typename signalT::slot_type* slotFunctor;
@@ -382,8 +382,8 @@ void ConnectSignals_5( const std::string& name,
                      Signature (T::*slotfunc),
                      T* parentPtr,
                      ScopedConnectionList& connections,
-                     EventManager::SignalType signalType,
-                     EventManager::Priority priority )
+                     EventManager::SignalType signalType = EventManager::any_SignalType,
+                     EventManager::Priority priority = EventManager::normal_Priority )
 {
     typedef typename boost::signals2::signal< Signature > signalT;
     typename signalT::slot_type* slotFunctor;
