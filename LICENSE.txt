@@ -16,30 +16,5 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  *
- *
  *************** <auto-copyright.rb END do not edit this line> ***************/
-
-#include <switchwire/ConnectionMonopoly.h>
-
-
-namespace switchwire
-{
-
-ConnectionMonopoly::ConnectionMonopoly( )
-{
-}
-
-ConnectionMonopoly::~ConnectionMonopoly( )
-{
-    // When this object is destroyed, mBlockers will go out of scope, which should
-    // cause all the shared pointers to shared_connection_block(s) to go out of
-    // scope and autodelete.
-}
-
-void ConnectionMonopoly::AddBlocker( boost::shared_ptr< boost::signals2::shared_connection_block > blocker )
-{
-    mBlockers.push_back( blocker );
-}
-
-}
 
