@@ -113,7 +113,7 @@ void EventManager::LogAllConnections()
 
     size_t cols = rs.columnCount();
 
-    LOG_FATAL( "What follows is a dump of all connected slots in the form (id, pattern, type, prio)." );
+    LOG_FATAL( "What follows is a dump of all connected slots in the form (index, id, pattern, type, prio)." );
     bool more = rs.moveFirst();
     while (more)
     {
