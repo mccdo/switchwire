@@ -20,6 +20,7 @@
 #include <Poco/Data/Session.h>
 #include <Poco/Data/SQLite/Connector.h>
 #include <Poco/Data/DataException.h>
+#include <Poco/Data/RecordSet.h>
 #include <Poco/SingletonHolder.h>
 
 #include <switchwire/EventManager.h>
@@ -31,6 +32,7 @@ using boost::weak_ptr;
 using boost::signals2::scoped_connection;
 using boost::signals2::shared_connection_block;
 
+//#define DEBUG_DESTRUCTOR
 
 namespace switchwire
 {
@@ -69,6 +71,9 @@ EventManager::EventManager():
 EventManager::~EventManager()
 {
     LOG_TRACE( "dtor" );
+#ifdef DEBUG_DESTRUCTOR
+    LogAllConnections();
+#endif
     Shutdown();
 
     // Delete all our signals
@@ -90,9 +95,35 @@ EventManager::~EventManager()
 
         while( iter != max )
         {
+#ifdef DEBUG_DESTRUCTOR
+            LOG_FATAL( "Deleting slot with id " << iter->first );
+#endif
             delete ( iter->second );
             ++iter;
         }
+    }
+}
+////////////////////////////////////////////////////////////////////////////////
+void EventManager::LogAllConnections()
+{
+    Poco::Data::Statement statement( *mSession );
+    statement << "SELECT * FROM slots";
+    statement.execute();
+    Poco::Data::RecordSet rs( statement );
+
+    size_t cols = rs.columnCount();
+
+    LOG_FATAL( "What follows is a dump of all connected slots in the form (id, pattern, type, prio)." );
+    bool more = rs.moveFirst();
+    while (more)
+    {
+        std::string rowText;
+        for (std::size_t col = 0; col < cols; ++col)
+        {
+            rowText += rs[col].convert<std::string>() + ",";
+        }
+        LOG_FATAL( rowText );
+        more = rs.moveNext();
     }
 }
 ////////////////////////////////////////////////////////////////////////////////

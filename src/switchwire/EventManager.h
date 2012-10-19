@@ -383,6 +383,11 @@ private:
                     int priority );
 
     ///
+    /// Writes all slot connections into the log. Intended mainly for debug
+    /// purposes.
+    void LogAllConnections();
+
+    ///
     /// Holds the signal name along with a weak_ptr to the corresponding
     /// EventBase. Used for connecting a slot to a signal.
     std::map< std::string, boost::weak_ptr< EventBase > > mSignals;
