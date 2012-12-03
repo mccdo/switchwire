@@ -104,7 +104,7 @@
 // combiner.
 #define CONNECTSIGNALPRE_COMBINER( signature, combiner ) do{\
         typedef boost::signals2::signal< signature, combiner > sig_type; \
-        sig_type::slot_type* slotFunctor = new sig_type::slot_type(
+        sig_type::slot_type slotFunctor = sig_type::slot_type(
 
 #define CONNECT____0_COMBINER( signature, combiner, slot ) \
                 CONNECTSIGNALPRE_COMBINER( signature, combiner ) \
