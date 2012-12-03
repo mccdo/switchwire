@@ -417,6 +417,8 @@ private:
 
     Poco::Logger& m_logger;
     LogStreamPtr m_logStream;
+
+    bool m_shutdown;
 };
 
 

@@ -50,7 +50,8 @@ EventManager* EventManager::instance()
 ////////////////////////////////////////////////////////////////////////////////
 EventManager::EventManager():
     mMonotonicID(0),
-    m_logger( Poco::Logger::get("switchwire::EventManager") )
+    m_logger( Poco::Logger::get("switchwire::EventManager") ),
+    m_shutdown( false )
 {
     m_logStream = LogStreamPtr( new Poco::LogStream( m_logger ) );
 
@@ -70,10 +71,6 @@ EventManager::EventManager():
 ////////////////////////////////////////////////////////////////////////////////
 EventManager::~EventManager()
 {
-    SW_LOG_TRACE( "dtor" );
-#ifdef DEBUG_DESTRUCTOR
-    LogAllConnections();
-#endif
     Shutdown();
 
     // Delete all our signals
@@ -87,6 +84,49 @@ EventManager::~EventManager()
 //            ++iter;
 //        }
     }
+}
+////////////////////////////////////////////////////////////////////////////////
+void EventManager::LogAllConnections()
+{
+    try
+    {
+        Poco::Data::Statement statement( *mSession );
+        statement << "SELECT * FROM slots";
+        statement.execute();
+        Poco::Data::RecordSet rs( statement );
+
+        size_t cols = rs.columnCount();
+
+        SW_LOG_FATAL( "What follows is a dump of all connected slots in the form (index, id, pattern, type, prio)." );
+        bool more = rs.moveFirst();
+        while (more)
+        {
+            std::string rowText;
+            for (std::size_t col = 0; col < cols; ++col)
+            {
+                rowText += rs[col].convert<std::string>() + ",";
+            }
+            SW_LOG_FATAL( rowText );
+            more = rs.moveNext();
+        }
+    }
+    catch( ... )
+    {
+        std::cout << "EventManager::LogAllConnections exception." << std::endl;
+    }
+}
+////////////////////////////////////////////////////////////////////////////////
+void EventManager::Shutdown()
+{
+    if( m_shutdown )
+    {
+        return;
+    }
+
+    SW_LOG_TRACE( "dtor" );
+#ifdef DEBUG_DESTRUCTOR
+    LogAllConnections();
+#endif
 
     // Delete all our stored slots
     {
@@ -98,37 +138,14 @@ EventManager::~EventManager()
 #ifdef DEBUG_DESTRUCTOR
             SW_LOG_FATAL( "Deleting slot with id " << iter->first );
 #endif
+            std::cout << iter->first << " " << iter->second << std::endl;
             delete ( iter->second );
             ++iter;
         }
-    }
-}
-////////////////////////////////////////////////////////////////////////////////
-void EventManager::LogAllConnections()
-{
-    Poco::Data::Statement statement( *mSession );
-    statement << "SELECT * FROM slots";
-    statement.execute();
-    Poco::Data::RecordSet rs( statement );
 
-    size_t cols = rs.columnCount();
-
-    SW_LOG_FATAL( "What follows is a dump of all connected slots in the form (index, id, pattern, type, prio)." );
-    bool more = rs.moveFirst();
-    while (more)
-    {
-        std::string rowText;
-        for (std::size_t col = 0; col < cols; ++col)
-        {
-            rowText += rs[col].convert<std::string>() + ",";
-        }
-        SW_LOG_FATAL( rowText );
-        more = rs.moveNext();
+        mExactSlotMap.clear();
     }
-}
-////////////////////////////////////////////////////////////////////////////////
-void EventManager::Shutdown()
-{
+
     try
     {
         Poco::Data::SQLite::Connector::unregisterConnector();
@@ -137,6 +154,8 @@ void EventManager::Shutdown()
     {
         ;
     }
+
+    m_shutdown = true;
 }
 ////////////////////////////////////////////////////////////////////////////////
 void EventManager::RegisterSignal( EventBase *sig, const std::string& sigName, SignalType sigType )
@@ -350,6 +369,7 @@ void EventManager::StoreSlot( const std::string& sigName,
                               int priority )
 {
     SW_LOG_TRACE( "StoreSlot " << sigName << " " << slot );
+
     mExactSlotMap[ mMonotonicID ] = slot;
 
     mExactSlotConnections[ mMonotonicID ] = connections.GetWeakPtr();
