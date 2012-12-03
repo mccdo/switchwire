@@ -76,10 +76,9 @@ public:
 
     virtual ~SlotWrapper( )
     {
-        ;
+        delete mSlot;
     }
 
-    //const typename T::slot_type& GetSlot( )
     const typename T::slot_type& GetSlot( )
     {
         return (*mSlot);
@@ -89,6 +88,27 @@ private:
     const typename T::slot_type* mSlot;
 
 };
+/*
+Test class to try and make a smart pointer for the SlotWrapper
+templated class.
+template <class T> 
+class SlotWrapperTPtr : boost::shared_ptr< SlotWrapper< T > >
+{
+public:
+    SlotWrapperTPtr( const typename T::slot_type* slot ) 
+        :
+        SlotWrapper( slot )
+    {
+        ;
+    }
 
+    SlotWrapperTPtr( const SlotWrapperTPtr& orig )
+        :
+        SlotWrapper( orig )
+    {
+        ;
+    }
+};
+*/
 }
 

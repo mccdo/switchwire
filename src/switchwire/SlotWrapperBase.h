@@ -42,5 +42,5 @@ public:
 private:
 
 };
-
+typedef boost::shared_ptr< SlotWrapperBase > SlotWrapperBasePtr;
 }

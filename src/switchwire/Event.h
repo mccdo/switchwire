@@ -66,11 +66,13 @@ public:
     {
     }
 
-    virtual bool ConnectSlot( SlotWrapperBase* slot,
+    virtual bool ConnectSlot( SlotWrapperBasePtr slot,
                               ScopedConnectionList& connections,
                               int priority )
     {
-        SlotWrapper< boost::signals2::signal<T,C> >* castSlot = dynamic_cast < SlotWrapper< boost::signals2::signal<T,C> >* > ( slot );
+        //This is hack
+        SlotWrapper< boost::signals2::signal<T,C> >* castSlot = dynamic_cast < SlotWrapper< boost::signals2::signal<T,C> >* > ( slot.get() );
+        //SlotWrapper< boost::signals2::signal<T,C> >* castSlot = dynamic_cast < SlotWrapper< boost::signals2::signal<T,C> >* > ( slot );
         if ( castSlot )
         {
             boost::shared_ptr< boost::signals2::scoped_connection > connection( new boost::signals2::scoped_connection );

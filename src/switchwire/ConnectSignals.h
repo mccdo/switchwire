@@ -81,7 +81,8 @@ void ConnectSignalsStatic( const std::string& name,
 {
     typedef typename boost::signals2::signal< Signature > signalT;
     typename signalT::slot_type* slotFunctor = new typename signalT::slot_type( slotfunc );
-    SlotWrapper< signalT >* slotWrapper = new SlotWrapper< signalT >( slotFunctor );
+    //SlotWrapper< signalT >* slotWrapper = new SlotWrapper< signalT >( slotFunctor );
+    SlotWrapperBasePtr slotWrapper = SlotWrapperBasePtr( new SlotWrapper< signalT >( slotFunctor ) );
     EventManager::instance()->ConnectSignals( name, slotWrapper,
             connections, signalType, priority );
 }
@@ -104,7 +105,7 @@ void ConnectSignalsCombinerStatic( const std::string& name,
 {
     typedef typename boost::signals2::signal< Signature, Combiner > signalT;
     typename signalT::slot_type* slotFunctor = new typename signalT::slot_type( slotfunc );
-    SlotWrapper< signalT >* slotWrapper = new SlotWrapper< signalT >( slotFunctor );
+    SlotWrapperBasePtr slotWrapper = SlotWrapperBasePtr( new SlotWrapper< signalT >( slotFunctor ) );
     EventManager::instance()->ConnectSignals( name, slotWrapper,
             connections, signalType, priority );
 }
@@ -130,7 +131,7 @@ void ConnectSignalsCombiner_0( const std::string& name,
     typedef typename boost::signals2::signal< Signature, Combiner > signalT;
     typename signalT::slot_type* slotFunctor = new typename signalT::slot_type(
             boost::bind( boost::mem_fn( slotfunc ), parentPtr ) );
-    SlotWrapper< signalT >* slotWrapper = new SlotWrapper< signalT >( slotFunctor );
+    SlotWrapperBasePtr slotWrapper = SlotWrapperBasePtr( new SlotWrapper< signalT >( slotFunctor ) );
     EventManager::instance()->ConnectSignals( name, slotWrapper,
             connections, signalType, priority );
 }
@@ -184,7 +185,7 @@ void ConnectSignals_0( const std::string& name,
     typedef typename boost::signals2::signal< Signature > signalT;
     typename signalT::slot_type* slotFunctor = new typename signalT::slot_type(
                 boost::bind( boost::mem_fn( slotfunc ), parentPtr ) );
-    SlotWrapper< signalT >* slotWrapper = new SlotWrapper< signalT >( slotFunctor );
+    SlotWrapperBasePtr slotWrapper = SlotWrapperBasePtr( new SlotWrapper< signalT >( slotFunctor ) );
     EventManager::instance()->ConnectSignals( name, slotWrapper,
             connections, signalType, priority );
 }
@@ -202,7 +203,7 @@ void ConnectSignalsCombiner_1( const std::string& name,
     typedef typename boost::signals2::signal< Signature, Combiner > signalT;
     typename signalT::slot_type* slotFunctor = new typename signalT::slot_type(
             boost::bind( boost::mem_fn( slotfunc ), parentPtr, _1 ) );
-    SlotWrapper< signalT >* slotWrapper = new SlotWrapper< signalT >( slotFunctor );
+    SlotWrapperBasePtr slotWrapper = SlotWrapperBasePtr( new SlotWrapper< signalT >( slotFunctor ) );
     EventManager::instance()->ConnectSignals( name, slotWrapper,
             connections, signalType, priority );
 }
@@ -219,7 +220,7 @@ void ConnectSignals_1( const std::string& name,
     typedef typename boost::signals2::signal< Signature > signalT;
     typename signalT::slot_type* slotFunctor = new typename signalT::slot_type(
                 boost::bind( boost::mem_fn( slotfunc ), parentPtr, _1 ) );
-    SlotWrapper< signalT >* slotWrapper = new SlotWrapper< signalT >( slotFunctor );
+    SlotWrapperBasePtr slotWrapper = SlotWrapperBasePtr( new SlotWrapper< signalT >( slotFunctor ) );
     EventManager::instance()->ConnectSignals( name, slotWrapper,
             connections, signalType, priority );
 }
@@ -237,7 +238,7 @@ void ConnectSignalsCombiner_2( const std::string& name,
     typedef typename boost::signals2::signal< Signature, Combiner > signalT;
     typename signalT::slot_type* slotFunctor = new typename signalT::slot_type(
             boost::bind( boost::mem_fn( slotfunc ), parentPtr, _1, _2 ) );
-    SlotWrapper< signalT >* slotWrapper = new SlotWrapper< signalT >( slotFunctor );
+    SlotWrapperBasePtr slotWrapper = SlotWrapperBasePtr( new SlotWrapper< signalT >( slotFunctor ) );
     EventManager::instance()->ConnectSignals( name, slotWrapper,
             connections, signalType, priority );
 }
@@ -254,7 +255,7 @@ void ConnectSignals_2( const std::string& name,
     typedef typename boost::signals2::signal< Signature > signalT;
     typename signalT::slot_type* slotFunctor = new typename signalT::slot_type(
                 boost::bind( boost::mem_fn( slotfunc ), parentPtr, _1, _2 ) );
-    SlotWrapper< signalT >* slotWrapper = new SlotWrapper< signalT >( slotFunctor );
+    SlotWrapperBasePtr slotWrapper = SlotWrapperBasePtr( new SlotWrapper< signalT >( slotFunctor ) );
     EventManager::instance()->ConnectSignals( name, slotWrapper,
             connections, signalType, priority );
 }
@@ -272,7 +273,7 @@ void ConnectSignalsCombiner_3( const std::string& name,
     typedef typename boost::signals2::signal< Signature, Combiner > signalT;
     typename signalT::slot_type* slotFunctor = new typename signalT::slot_type(
             boost::bind( boost::mem_fn( slotfunc ), parentPtr, _1, _2, _3 ) );
-    SlotWrapper< signalT >* slotWrapper = new SlotWrapper< signalT >( slotFunctor );
+    SlotWrapperBasePtr slotWrapper = SlotWrapperBasePtr( new SlotWrapper< signalT >( slotFunctor ) );
     EventManager::instance()->ConnectSignals( name, slotWrapper,
             connections, signalType, priority );
 }
@@ -289,7 +290,7 @@ void ConnectSignals_3( const std::string& name,
     typedef typename boost::signals2::signal< Signature > signalT;
     typename signalT::slot_type* slotFunctor = new typename signalT::slot_type(
                 boost::bind( boost::mem_fn( slotfunc ), parentPtr, _1, _2, _3 ) );
-    SlotWrapper< signalT >* slotWrapper = new SlotWrapper< signalT >( slotFunctor );
+    SlotWrapperBasePtr slotWrapper = SlotWrapperBasePtr( new SlotWrapper< signalT >( slotFunctor ) );
     EventManager::instance()->ConnectSignals( name, slotWrapper,
             connections, signalType, priority );
 }
@@ -308,7 +309,7 @@ void ConnectSignalsCombiner_4( const std::string& name,
     typename signalT::slot_type* slotFunctor = new typename signalT::slot_type(
             boost::bind( boost::mem_fn( slotfunc ),
                          parentPtr, _1, _2, _3, _4 ) );
-    SlotWrapper< signalT >* slotWrapper = new SlotWrapper< signalT >( slotFunctor );
+    SlotWrapperBasePtr slotWrapper = SlotWrapperBasePtr( new SlotWrapper< signalT >( slotFunctor ) );
     EventManager::instance()->ConnectSignals( name, slotWrapper,
             connections, signalType, priority );
 }
@@ -326,7 +327,7 @@ void ConnectSignals_4( const std::string& name,
     typename signalT::slot_type* slotFunctor = new typename signalT::slot_type(
             boost::bind( boost::mem_fn( slotfunc ),
                          parentPtr, _1, _2, _3, _4 ) );
-    SlotWrapper< signalT >* slotWrapper = new SlotWrapper< signalT >( slotFunctor );
+    SlotWrapperBasePtr slotWrapper = SlotWrapperBasePtr( new SlotWrapper< signalT >( slotFunctor ) );
     EventManager::instance()->ConnectSignals( name, slotWrapper,
             connections, signalType, priority );
 }
@@ -345,7 +346,7 @@ void ConnectSignalsCombiner_5( const std::string& name,
     typename signalT::slot_type* slotFunctor = new typename signalT::slot_type(
             boost::bind( boost::mem_fn( slotfunc ),
                          parentPtr, _1, _2, _3, _4, _5 ) );
-    SlotWrapper< signalT >* slotWrapper = new SlotWrapper< signalT >( slotFunctor );
+    SlotWrapperBasePtr slotWrapper = SlotWrapperBasePtr( new SlotWrapper< signalT >( slotFunctor ) );
     EventManager::instance()->ConnectSignals( name, slotWrapper,
             connections, signalType, priority );
 }
@@ -363,7 +364,7 @@ void ConnectSignals_5( const std::string& name,
     typename signalT::slot_type* slotFunctor = new typename signalT::slot_type(
             boost::bind( boost::mem_fn( slotfunc ),
                          parentPtr, _1, _2, _3, _4, _5 ) );
-    SlotWrapper< signalT >* slotWrapper = new SlotWrapper< signalT >( slotFunctor );
+    SlotWrapperBasePtr slotWrapper = SlotWrapperBasePtr( new SlotWrapper< signalT >( slotFunctor ) );
     EventManager::instance()->ConnectSignals( name, slotWrapper,
             connections, signalType, priority );
 }

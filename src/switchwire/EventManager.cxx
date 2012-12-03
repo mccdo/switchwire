@@ -130,16 +130,15 @@ void EventManager::Shutdown()
 
     // Delete all our stored slots
     {
-        std::map< int, SlotWrapperBase* >::const_iterator iter = mExactSlotMap.begin();
-        std::map< int, SlotWrapperBase* >::const_iterator max = mExactSlotMap.end();
+        std::map< int, SlotWrapperBasePtr >::iterator iter = mExactSlotMap.begin();
+        std::map< int, SlotWrapperBasePtr >::const_iterator max = mExactSlotMap.end();
 
         while( iter != max )
         {
 #ifdef DEBUG_DESTRUCTOR
             SW_LOG_FATAL( "Deleting slot with id " << iter->first );
 #endif
-            std::cout << iter->first << " " << iter->second << std::endl;
-            delete ( iter->second );
+            iter->second = SlotWrapperBasePtr();
             ++iter;
         }
 
@@ -222,9 +221,9 @@ void EventManager::ConnectToPreviousSlots( const std::string& sigName )
     std::vector< int >::iterator prioritiesIter = priorities.begin();
     while( idsIter != ids.end() )
     {
-        SlotWrapperBase* slot = mExactSlotMap[ *idsIter ];
+        SlotWrapperBasePtr slot = mExactSlotMap.find( *idsIter )->second;
         weak_ptr< ScopedConnectionList > wConnectionsPtr
-                = mExactSlotConnections[ *idsIter ];
+                = mExactSlotConnections.find( *idsIter )->second;
 
         if( shared_ptr< ScopedConnectionList > sConnectionsPtr = wConnectionsPtr.lock() )
         {
@@ -248,11 +247,11 @@ void EventManager::ConnectToPreviousSlots( const std::string& sigName )
 
             // We can also remove this entry from mExactSlotMap and free up
             // associated memory
-            std::map< int, SlotWrapperBase* >::iterator slotIter =
+            std::map< int, SlotWrapperBasePtr >::iterator slotIter =
                     mExactSlotMap.find( *idsIter );
             if( slotIter != mExactSlotMap.end() )
             {
-                delete( slotIter->second );
+                //delete( slotIter->second );
                 mExactSlotMap.erase( slotIter );
             }
         }
@@ -262,7 +261,7 @@ void EventManager::ConnectToPreviousSlots( const std::string& sigName )
 }
 ////////////////////////////////////////////////////////////////////////////////
 void EventManager::ConnectSignal( const std::string& sigName,
-                                  SlotWrapperBase* slot,
+                                  SlotWrapperBasePtr slot,
                                   ScopedConnectionList& connections,
                                   int priority )
 {
@@ -270,7 +269,7 @@ void EventManager::ConnectSignal( const std::string& sigName,
 }
 ////////////////////////////////////////////////////////////////////////////////
 void EventManager::_ConnectSignal( const std::string& sigName,
-                                  SlotWrapperBase* slot,
+                                  SlotWrapperBasePtr slot,
                                   ScopedConnectionList& connections,
                                   int priority,
                                   bool store )
@@ -340,7 +339,7 @@ void EventManager::_ConnectSignal( const std::string& sigName,
 }
 ////////////////////////////////////////////////////////////////////////////////
 void EventManager::ConnectSignals( const std::string& stringToMatch,
-                                   SlotWrapperBase* slot,
+                                   SlotWrapperBasePtr slot,
                                    ScopedConnectionList& connections,
                                    SignalType sigType,
                                    int priority )
@@ -363,7 +362,7 @@ void EventManager::ConnectSignals( const std::string& stringToMatch,
 }
 ////////////////////////////////////////////////////////////////////////////////
 void EventManager::StoreSlot( const std::string& sigName,
-                              SlotWrapperBase* slot,
+                              SlotWrapperBasePtr slot,
                               ScopedConnectionList& connections,
                               int type,
                               int priority )

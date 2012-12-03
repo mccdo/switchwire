@@ -71,7 +71,7 @@ public:
     /// signal. This priority is a raw integer rather than one of the enumerated
     /// priorities from EventManager so that this class need not depend on
     /// EventManager.h
-    virtual bool ConnectSlot( SlotWrapperBase* slot,
+    virtual bool ConnectSlot( SlotWrapperBasePtr slot,
                               ScopedConnectionList& connections,
                               int priority ) = 0;
 

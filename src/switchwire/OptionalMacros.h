@@ -36,7 +36,7 @@
         sig_type::slot_type* slotFunctor = new sig_type::slot_type(
 
 #define CONNECTSIGNALPOST  ); \
-                switchwire::SlotWrapper< sig_type >* slotWrapper = new switchwire::SlotWrapper< sig_type >( slotFunctor );
+                switchwire::SlotWrapperBasePtr slotWrapper = switchwire::SlotWrapperBasePtr( new switchwire::SlotWrapper< sig_type >( slotFunctor ) );
 
 #define CONNECTSIGNALCALL( name, connections, priority ) \
         switchwire::EventManager::instance()->ConnectSignal( name, slotWrapper, \

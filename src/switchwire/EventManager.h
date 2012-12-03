@@ -33,6 +33,7 @@
 #include <switchwire/ScopedConnectionList.h>
 #include <switchwire/ConnectionMonopoly.h>
 #include <switchwire/SlotWrapper.h>
+#include <switchwire/SlotWrapperBase.h>
 
 #include <switchwire/Exports.h>
 
@@ -297,7 +298,7 @@ public:
      * @see ConnectSignals
      **/
     void ConnectSignal( const std::string& sigName,
-                        SlotWrapperBase* slot,
+                        SlotWrapperBasePtr slot,
                         ScopedConnectionList& connections,
                         int priority = normal_Priority );
 
@@ -323,7 +324,7 @@ public:
      * @see SlotWrapper
      **/
     void ConnectSignals( const std::string& stringToMatch,
-                         SlotWrapperBase* slot,
+                         SlotWrapperBasePtr slot,
                          ScopedConnectionList& connections,
                          SignalType sigType = any_SignalType,
                          int priority = normal_Priority );
@@ -369,7 +370,7 @@ private:
     void GetSlotMatches( const std::string& sigName, std::vector< int >& ids, std::vector< int >& priorities );
 
     void _ConnectSignal( const std::string& sigName,
-                         SlotWrapperBase* slot,
+                         SlotWrapperBasePtr slot,
                          ScopedConnectionList& connections,
                          int priority,
                          bool store );
@@ -377,7 +378,7 @@ private:
     ///
     /// Stores slot information off for asynchronous connection
     void StoreSlot( const std::string& sigName,
-                    SlotWrapperBase* slot,
+                    SlotWrapperBasePtr slot,
                     ScopedConnectionList& connections,
                     int type,
                     int priority );
@@ -410,7 +411,7 @@ private:
     /// to allow for efficient searches
     Poco::Data::Session* mSession;
 
-    std::map< int, SlotWrapperBase* > mExactSlotMap;
+    std::map< int, SlotWrapperBasePtr > mExactSlotMap;
     std::map< int, boost::weak_ptr< ScopedConnectionList > > mExactSlotConnections;
 
     int mMonotonicID;
