@@ -33,10 +33,10 @@
 
 #define CONNECTSIGNALPRE( signature ) do{\
         typedef boost::signals2::signal< signature > sig_type; \
-        sig_type::slot_type* slotFunctor = new sig_type::slot_type(
+        sig_type::slot_type slotFunctor = sig_type::slot_type(
 
 #define CONNECTSIGNALPOST  ); \
-                switchwire::SlotWrapper< sig_type >* slotWrapper = new switchwire::SlotWrapper< sig_type >( slotFunctor );
+                switchwire::SlotWrapper< sig_type >* slotWrapper = new switchwire::SlotWrapper< sig_type >( &slotFunctor );
 
 #define CONNECTSIGNALCALL( name, connections, priority ) \
         switchwire::EventManager::instance()->ConnectSignal( name, slotWrapper, \

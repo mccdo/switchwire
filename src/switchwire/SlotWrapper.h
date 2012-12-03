@@ -76,7 +76,7 @@ public:
 
     virtual ~SlotWrapper( )
     {
-        delete mSlot;
+        ;
     }
 
     //const typename T::slot_type& GetSlot( )
