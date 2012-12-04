@@ -72,18 +72,6 @@ EventManager::EventManager():
 EventManager::~EventManager()
 {
     Shutdown();
-
-    // Delete all our signals
-    {
-//        std::map< std::string, boost::weak_ptr< EventBase > >::const_iterator iter = mSignals.begin();
-//        std::map< std::string, boost::weak_ptr< EventBase > >::const_iterator max = mSignals.end();
-
-//        while( iter != max )
-//        {
-//            delete ( iter->second );
-//            ++iter;
-//        }
-    }
 }
 ////////////////////////////////////////////////////////////////////////////////
 void EventManager::LogAllConnections()
@@ -122,7 +110,6 @@ void EventManager::Shutdown()
     {
         return;
     }
-
     SW_LOG_TRACE( "dtor" );
 #ifdef DEBUG_DESTRUCTOR
     LogAllConnections();
@@ -137,8 +124,13 @@ void EventManager::Shutdown()
         {
 #ifdef DEBUG_DESTRUCTOR
             SW_LOG_FATAL( "Deleting slot with id " << iter->first );
+            SW_LOG_FATAL( iter->first << " " << iter->second );
 #endif
-            iter->second = SlotWrapperBasePtr();
+            // This should be unnecessary since we're using shared ptrs for
+            // SlotWrappers now. The call to mExactSlotMap.clear() a bit later
+            // on should cause those ptrs to leave scope and autodelete.
+            //iter->second = SlotWrapperBasePtr();
+
             ++iter;
         }
 
@@ -157,9 +149,11 @@ void EventManager::Shutdown()
     m_shutdown = true;
 }
 ////////////////////////////////////////////////////////////////////////////////
-void EventManager::RegisterSignal( EventBase *sig, const std::string& sigName, SignalType sigType )
+void EventManager::RegisterSignal( EventBase* sig, const std::string& sigName, SignalType sigType )
 {
     SW_LOG_DEBUG( "RegisterSignal: " << sigName );
+
+    ConnectToSignalLogger( sig, sigName );
 
     // Add this signal to the lookup table
     try
@@ -518,6 +512,62 @@ shared_ptr< ConnectionMonopoly > EventManager::MonopolizeConnectionStrong( share
     }
 
     return monopoly;
+}
+////////////////////////////////////////////////////////////////////////////////
+void EventManager::ConnectToSignalLogger( EventBase* sig, const std::string& sigName )
+{
+    // What I want to do here is to iterate through a list of slot-containing objects
+    // of various types until the signal is able to connect to one of them.
+    // Then I want to destroy the connection, clone the slot object, and connect the signal
+    // to the clone with prio 5. Then I'll hand the full name of the signal to the clone.
+    // The clone will log the time and name of the calling signal every time
+    // the signal is fired.
+
+    // The main drawback to this technique is that I have to have a list of every
+    // possible slot signature. If there were some way to inspect the type of the
+    // Event template class contained by the EvenBase and dynamically create a
+    // matching slot object, that would be ideal. I don't think it's possible though.
+//    _ConnectSignal( const std::string& sigName,
+//                                      SlotWrapperBase* slot,
+//                                      ScopedConnectionList& connections,
+//                                      int priority,
+//                                      bool store )
+}
+////////////////////////////////////////////////////////////////////////////////
+void EventManager::CleanupSlotMemory()
+{
+    std::map< int, SlotWrapperBasePtr >::iterator itr = mExactSlotMap.begin();
+    while( itr != mExactSlotMap.end() )
+    {
+        int slotID = itr->first;
+        weak_ptr< ScopedConnectionList > wConnectionsPtr
+                = mExactSlotConnections.find( slotID )->second;
+
+        if( shared_ptr< ScopedConnectionList > sConnectionsPtr = wConnectionsPtr.lock() )
+        {
+            ++itr;
+        }
+        else
+        {
+            // If we were unable to lock the weak ptr, the underlying object
+            // must have been destroyed. Remove this entry from the database.
+            try
+            {
+                ( *mSession ) << "DELETE FROM slots WHERE mapID=:id",
+                        Poco::Data::use( slotID ),
+                        Poco::Data::now;
+            }
+            catch( Poco::Data::DataException& ex )
+            {
+                std::cout << ex.displayText() << std::endl;
+            }
+
+            // Remove this entry from mExactSlotMap to free up associated memory
+            std::map< int, SlotWrapperBasePtr >::iterator eraseMe = itr;
+            ++itr;
+            mExactSlotMap.erase( eraseMe );
+        }
+    }
 }
 ////////////////////////////////////////////////////////////////////////////////
 } // namespace switchwire

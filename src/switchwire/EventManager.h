@@ -329,8 +329,29 @@ public:
                          SignalType sigType = any_SignalType,
                          int priority = normal_Priority );
 
-    ///Close down the db
+    /// Close down the db
     void Shutdown();
+
+    /**
+      * Forces cleanup of all slots which no longer have a valid
+      * ScopedConnectionList associated with them. It is not generally necessary
+      * to explicitly call this method, as this "garbage collection" is
+      * automatically performed each time a new signal is registered.
+      *
+      * However, when a slot resides in a dynamic plugin library, it is
+      * necessary on some platforms to explicitly unregister the memory
+      * associated with slot bookkeeping before the object containing the slot
+      * has been fully destroyed. Failure to do this may cause a segmentation
+      * fault during program exit.
+      *
+      * The proper way to avoid this behavior in plugins is to
+      * hold a pointer to a ScopedConnectionList rather than keeping a
+      * ScopedConnectionList as a member variable. In the destructor of each
+      * plugin object that has slots, explicitly delete the ScopedConnectionList
+      * and then immediately call this method so that memory can be properly
+      * deallocated before the plugin itself is fully destroyed.
+      **/
+    void CleanupSlotMemory();
 
 private:
     
@@ -387,6 +408,8 @@ private:
     /// Writes all slot connections into the log. Intended mainly for debug
     /// purposes.
     void LogAllConnections();
+
+    void ConnectToSignalLogger(EventBase* sig, const std::string& sigName);
 
     ///
     /// Holds the signal name along with a weak_ptr to the corresponding
