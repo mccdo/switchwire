@@ -124,12 +124,9 @@ void EventManager::Shutdown()
         {
 #ifdef DEBUG_DESTRUCTOR
             SW_LOG_FATAL( "Deleting slot with id " << iter->first );
-            SW_LOG_FATAL( iter->first << " " << iter->second );
 #endif
-            // This should be unnecessary since we're using shared ptrs for
-            // SlotWrappers now. The call to mExactSlotMap.clear() a bit later
-            // on should cause those ptrs to leave scope and autodelete.
-            //iter->second = SlotWrapperBasePtr();
+            //Delete the slots sequentialy to debug potential problems
+            iter->second = SlotWrapperBasePtr();
 
             ++iter;
         }
