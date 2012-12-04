@@ -344,12 +344,11 @@ public:
       * has been fully destroyed. Failure to do this may cause a segmentation
       * fault during program exit.
       *
-      * The proper way to avoid this behavior in plugins is to
-      * hold a pointer to a ScopedConnectionList rather than keeping a
-      * ScopedConnectionList as a member variable. In the destructor of each
-      * plugin object that has slots, explicitly delete the ScopedConnectionList
-      * and then immediately call this method so that memory can be properly
-      * deallocated before the plugin itself is fully destroyed.
+      * The proper way to avoid this behavior in plugins is to call the
+      * DropConnections() method on the ScopedConnectionList associated with the
+      * plugin object during destruction, then immediately call this method
+      * so that memory can be properly deallocated before the plugin object
+      * itself is fully destroyed.
       **/
     void CleanupSlotMemory();
 
