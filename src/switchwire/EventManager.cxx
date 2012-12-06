@@ -511,7 +511,7 @@ shared_ptr< ConnectionMonopoly > EventManager::MonopolizeConnectionStrong( share
     return monopoly;
 }
 ////////////////////////////////////////////////////////////////////////////////
-void EventManager::ConnectToSignalLogger( EventBase* sig, const std::string& sigName )
+void EventManager::ConnectToSignalLogger( EventBase*, const std::string& )
 {
     // What I want to do here is to iterate through a list of slot-containing objects
     // of various types until the signal is able to connect to one of them.
