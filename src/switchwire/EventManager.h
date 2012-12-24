@@ -23,7 +23,10 @@
 
 // --- Boost includes --- //
 #include <boost/noncopyable.hpp>
-#include<boost/signals2/signal.hpp>
+#include <switchwire/CompilerGuards.h>
+DIAG_OFF(unused-parameter)
+    #include<boost/signals2/signal.hpp>
+DIAG_ON(unused-parameter)
 #include<boost/weak_ptr.hpp>
 #include<boost/shared_ptr.hpp>
 

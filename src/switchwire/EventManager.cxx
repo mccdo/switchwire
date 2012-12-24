@@ -20,7 +20,10 @@
 #include <Poco/Data/Session.h>
 #include <Poco/Data/SQLite/Connector.h>
 #include <Poco/Data/DataException.h>
-#include <Poco/Data/RecordSet.h>
+#include <switchwire/CompilerGuards.h>
+DIAG_OFF(unused-parameter)
+    #include <Poco/Data/RecordSet.h>
+DIAG_ON(unused-parameter)
 #include <Poco/SingletonHolder.h>
 
 #include <switchwire/EventManager.h>
