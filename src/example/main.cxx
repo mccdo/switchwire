@@ -23,16 +23,15 @@
 #include <Poco/ConsoleChannel.h>
 #include <Poco/PatternFormatter.h>
 #include <Poco/FormattingChannel.h>
+#include <Poco/SimpleFileChannel.h>
 
 // The minimal set of headers required to register a signal and connect a slot
 // to it.
 #include <switchwire/ConnectSignals.h>
+#include <switchwire/Event.h>
 
 // If you're just registering a signal but not connecting any slots in that
 // compilation unit, you only need <switchwire/EventManager.h>
-
-
-#include "slotinclass.h"
 
 void prt( int num )
 {
@@ -55,15 +54,31 @@ int main()
             new Poco::FormattingChannel( formatter, console );
     Poco::Logger::root().setChannel( formattingChannel );
 
+    // Now we're going to set up a file channel for logging all signal registrations.
+    // This technique can be used to dump out a list of all signal names that are
+    // registered during an entire run of an application.
+    Poco::SimpleFileChannel* fileChannel = new Poco::SimpleFileChannel( "Signals.txt" );
+    Poco::Logger::get( "RegLog" ).setChannel( fileChannel );
+    switchwire::EventManager::instance()->LogAllRegistrations( Poco::Logger::get( "RegLog" ) );
 
+
+    // With logging mechanisms out of the way, let's get started on real code:
+
+    std::cout << std::endl << "Log messages are prefixed with 'switchwire::EventManager'" << std::endl << std::endl;
 
 
     // Declare an event (usually done as a class member variable)
     switchwire::Event< void (int) > intSignal;
-    
-    // Register the event with EventManager
-    switchwire::EventManager::instance()->
-      RegisterSignal( &intSignal , "ATestEvent" );
+
+    // This "useless signal" demonstrates registering the same signal with
+    // two different names, and shows that when fired, a log entry is made for
+    // each name.
+    switchwire::Event< bool (float, double, int, const std::string& ) > uselessSignal;
+    switchwire::EventManager::instance()->RegisterSignal( &uselessSignal, "UselessSignal" );
+    switchwire::EventManager::instance()->RegisterSignal( &uselessSignal, "TheSameUselessSignalWithADifferentName" );
+    uselessSignal.EnableNotification( "UselessSignal" );
+    uselessSignal.EnableNotification( "TheSameUselessSignalWithADifferentName" );
+    uselessSignal.signal( 1.2f, 1.3, 7, "A Duck!" );
          
     // Create a ScopedConnectionList, which is required for connecting to an
     // event. This is frequently a class member variable also.
@@ -79,16 +94,21 @@ int main()
                     switchwire::EventManager::any_SignalType,
                     switchwire::EventManager::normal_Priority*/ );
 
-    // Instantiate a class with a valid slot that connects to "ATestEvent". Look
-    // at the class's code to see how this works. Most applications will connect
-    // to events from inside classes far more often than in global or static
-    // functions like above.
-    SlotInClass mySlotClass;
+    // Register the event with EventManager
+    switchwire::EventManager::instance()->
+      RegisterSignal( &intSignal , "ATestEvent" );
 
-    // We could even instantiate a few of these, and each one will be called
-    // in turn. Uncomment to see the behavior.
-    //SlotInClass msc2;
-    //SlotInClass msc3;
+    // Notice that we don't call EnableNotification for intSignal, so it doesn't
+    // get logged.
+
+    // Print out a list of all signals that have been registered
+    std::cout << "\nList of registered signals:" << std::endl;
+    std::vector< std::string > names = switchwire::EventManager::instance()->GetAllSignalNames();
+    for( size_t index = 0; index < names.size(); ++index )
+    {
+        std::cout << "\t" << names.at( index ) << std::endl;
+    }
+    std::cout << std::endl;
                             
     // Fire the signal several times
     intSignal.signal( 1 );
@@ -96,6 +116,11 @@ int main()
     intSignal.signal( 5 );
     intSignal.signal( 4 );
     intSignal.signal( 5 );
+
+    // The next two lines are not generally necessary, but demonstrate how to
+    // properly trigger memory cleanup when you have slots in a dynamic plugin.
+    connections.Reset();
+    switchwire::EventManager::instance()->CleanupSlotMemory();
 
 #if 0
     // Expired event test

@@ -114,6 +114,8 @@ public:
     /// Returns a weak pointer to this object without the need to create a shared ptr first.
     boost::weak_ptr< ScopedConnectionList > GetWeakPtr() const { return this_; }
 
+    void Reset() { this_.reset(); }
+
 private:
     boost::shared_ptr< ScopedConnectionList > this_;
     ConnectionList_type mConnections;

@@ -153,7 +153,16 @@ void EventManager::RegisterSignal( EventBase* sig, const std::string& sigName, S
 {
     SW_LOG_DEBUG( "RegisterSignal: " << sigName );
 
-    ConnectToSignalLogger( sig, sigName );
+    if( m_autoNotify )
+    {
+        sig->EnableNotification( sigName );
+    }
+
+    // If there's a reg. logger setup, give it the signal name
+    if( m_registrationLogStream )
+    {
+        m_registrationLogStream->fatal() << sigName << std::endl;
+    }
 
     // Add this signal to the lookup table
     try
@@ -514,26 +523,6 @@ shared_ptr< ConnectionMonopoly > EventManager::MonopolizeConnectionStrong( share
     return monopoly;
 }
 ////////////////////////////////////////////////////////////////////////////////
-void EventManager::ConnectToSignalLogger( EventBase*, const std::string& )
-{
-    // What I want to do here is to iterate through a list of slot-containing objects
-    // of various types until the signal is able to connect to one of them.
-    // Then I want to destroy the connection, clone the slot object, and connect the signal
-    // to the clone with prio 5. Then I'll hand the full name of the signal to the clone.
-    // The clone will log the time and name of the calling signal every time
-    // the signal is fired.
-
-    // The main drawback to this technique is that I have to have a list of every
-    // possible slot signature. If there were some way to inspect the type of the
-    // Event template class contained by the EvenBase and dynamically create a
-    // matching slot object, that would be ideal. I don't think it's possible though.
-//    _ConnectSignal( const std::string& sigName,
-//                                      SlotWrapperBase* slot,
-//                                      ScopedConnectionList& connections,
-//                                      int priority,
-//                                      bool store )
-}
-////////////////////////////////////////////////////////////////////////////////
 void EventManager::CleanupSlotMemory()
 {
     std::map< int, SlotWrapperBasePtr >::iterator itr = mExactSlotMap.begin();
@@ -568,6 +557,41 @@ void EventManager::CleanupSlotMemory()
             mExactSlotMap.erase( eraseMe );
         }
     }
+}
+////////////////////////////////////////////////////////////////////////////////
+std::vector<std::string> EventManager::GetAllSignalNames()
+{
+    std::vector< std::string > allSignalNames;
+    std::map< std::string, boost::weak_ptr< EventBase > >::const_iterator it;
+    it = mSignals.begin();
+    while( it != mSignals.end() )
+    {
+        allSignalNames.push_back( it->first );
+        ++it;
+    }
+    return allSignalNames;
+}
+////////////////////////////////////////////////////////////////////////////////
+void EventManager::NotifySignalFiring( const std::vector<std::string>& names )
+{
+    std::vector< std::string >::const_iterator it = names.begin();
+    while( it != names.end() )
+    {
+        // This is probably not what we want to do with this long-term, but for
+        // now just dump this out to the log.
+        SW_LOG_INFO( "Firing signal: " << *it );
+        ++it;
+    }
+}
+////////////////////////////////////////////////////////////////////////////////
+void EventManager::AutoNotify( bool notify )
+{
+    m_autoNotify = notify;
+}
+////////////////////////////////////////////////////////////////////////////////
+void EventManager::LogAllRegistrations( Poco::Logger& logger )
+{
+    m_registrationLogStream = LogStreamPtr( new Poco::LogStream( logger ) );
 }
 ////////////////////////////////////////////////////////////////////////////////
 } // namespace switchwire

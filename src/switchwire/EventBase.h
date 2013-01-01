@@ -90,6 +90,8 @@ public:
     /// out.
     virtual long unsigned int GetSignalAddress() = 0;
 
+    /// Allows derived types to connect to a logging mechanism
+    virtual void EnableNotification( const std::string& name ) = 0;
 
 protected:
     std::list< boost::weak_ptr< boost::signals2::scoped_connection > > mConnections;

@@ -32,7 +32,7 @@ DIAG_ON(unused-parameter)
 
 #include <Poco/SingletonHolder.h>
 
-#include <switchwire/Event.h>
+#include <switchwire/EventBase.h>
 #include <switchwire/ScopedConnectionList.h>
 #include <switchwire/ConnectionMonopoly.h>
 #include <switchwire/SlotWrapper.h>
@@ -347,13 +347,22 @@ public:
       * has been fully destroyed. Failure to do this may cause a segmentation
       * fault during program exit.
       *
-      * The proper way to avoid this behavior in plugins is to call the
-      * DropConnections() method on the ScopedConnectionList associated with the
-      * plugin object during destruction, then immediately call this method
+      * The proper way to avoid this behavior in plugins is to hold a pointer
+      * to a ScopedConnectionList and delete the list during destruction of
+      * the object in the plugin. Then immediately call this method
       * so that memory can be properly deallocated before the plugin object
       * itself is fully destroyed.
       **/
     void CleanupSlotMemory();
+
+    /// Returns the name of every signal currently registered.
+    std::vector< std::string > GetAllSignalNames();
+
+    void NotifySignalFiring( std::vector<std::string> const& names );
+
+    void AutoNotify( bool notify );
+
+    void LogAllRegistrations( Poco::Logger& logger );
 
 private:
     
@@ -411,8 +420,6 @@ private:
     /// purposes.
     void LogAllConnections();
 
-    void ConnectToSignalLogger(EventBase* sig, const std::string& sigName);
-
     ///
     /// Holds the signal name along with a weak_ptr to the corresponding
     /// EventBase. Used for connecting a slot to a signal.
@@ -444,7 +451,11 @@ private:
     Poco::Logger& m_logger;
     LogStreamPtr m_logStream;
 
+    LogStreamPtr m_registrationLogStream;
+
     bool m_shutdown;
+
+    bool m_autoNotify;
 };
 
 

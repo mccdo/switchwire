@@ -25,6 +25,7 @@
 #include<boost/shared_ptr.hpp>
 #include<boost/weak_ptr.hpp>
 
+#include <switchwire/EventManager.h>
 #include <switchwire/EventBase.h>
 #include <switchwire/SlotWrapper.h>
 #include <switchwire/ScopedConnectionList.h>
@@ -97,17 +98,55 @@ public:
         }
     }
 
+    /// If you want EventManager to be notified every time this signal is fired
+    /// (so that it can log the signal fire), call this method with the name
+    /// that should be logged to turn on notification. If the signal was
+    /// registered under multiple names and you want each name logged, you can
+    /// call this method more than once, providing a different name each time.
+    ///
+    /// Notification does not affect how this signal is propagated to connected
+    /// slots; it's strictly a logging mechanism. The notification process is a
+    /// bit costly, so it's unadvisable to turn on logging for signals that
+    /// should have low latency or are otherwise performance-critical.
+    ///
+    /// If you only need this sort of signal logging while debugging, see
+    /// @c EventManager::AutoNotify. Setting autonotify to true will cause
+    /// EventManager to set up this notification automatically during the signal
+    /// registration process. Of course, this means that it will log even
+    /// performance-critical signals that you may not want logged.
+    virtual void EnableNotification( const std::string& name )
+    {
+        m_names.push_back( name );
+        // Since the slot and signal are destroyed at the same time, we don't
+        // have to worry about connection lifetime manangement. However, we
+        // only want to connect to the logging slot iff this is the first name
+        // under which this signal was registered; otherwise the slot would get
+        // called multiple times each time the signal was fired.
+        if( 1 == m_names.size() )
+        {
+            signal.connect( 0, boost::bind( boost::mem_fn( &Event<T,C>::LogSlot ), this ) );
+        }
+    }
+
     // This function exists for debugging and failure logging purposes.
     virtual long unsigned int GetSignalAddress()
     {
         return reinterpret_cast<long unsigned int>( &signal );
     }
 
-    boost::signals2::signal<T,C> signal;
+    boost::signals2::signal<T,C> signal; // intentionally left public!
+
+protected:
+    typename boost::function_traits<T>::result_type LogSlot()
+    {
+        // This is *not* how events are propagated to slots! This is strictly a
+        // logging mechanism.
+        EventManager::instance()->NotifySignalFiring( m_names );
+    }
+
+private:
+    std::vector< std::string > m_names;
 };
 ////////////////////////////////////////////////////////////////////////////////
-
-
-
-}
+} // namespace
 
