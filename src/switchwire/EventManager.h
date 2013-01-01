@@ -453,9 +453,9 @@ private:
 
     LogStreamPtr m_registrationLogStream;
 
-    bool m_shutdown;
-
     bool m_autoNotify;
+
+    bool m_shutdown;
 };
 
 

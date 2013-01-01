@@ -54,6 +54,7 @@ EventManager* EventManager::instance()
 EventManager::EventManager():
     mMonotonicID(0),
     m_logger( Poco::Logger::get("switchwire::EventManager") ),
+    m_autoNotify( false ),
     m_shutdown( false )
 {
     m_logStream = LogStreamPtr( new Poco::LogStream( m_logger ) );
