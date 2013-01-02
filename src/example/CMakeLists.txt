@@ -24,19 +24,21 @@ INSTALL(
 
 
 ####### Scripting (scripting.cxx) #######
+if(Squirrel_FOUND AND Sqrat_FOUND)
 # Commented out for now until we setup installers and find modules for
 # squirrel and sqrat
-#SET(TARGET_SRC scripting.cxx)
-#SET(TARGET_NAME Scripting)
-#ADD_EXECUTABLE(${TARGET_NAME} ${TARGET_SRC})
-#TARGET_LINK_LIBRARIES(${TARGET_NAME} switchwire /home/penn/deps/SQUIRREL3/lib/libsquirrel.a /home/penn/deps/SQUIRREL3/lib/libsqstdlib.a)
-#
-#SET(INSTALL_BINDIR bin)
-#
-#INSTALL(
-#        TARGETS ${TARGET_NAME}
-#        RUNTIME DESTINATION ${INSTALL_BINDIR}
-#    )
+    SET(TARGET_SRC scripting.cxx)
+    SET(TARGET_NAME Scripting)
+    ADD_EXECUTABLE(${TARGET_NAME} ${TARGET_SRC})
+    TARGET_LINK_LIBRARIES(${TARGET_NAME} switchwire ${Squirrel_LIBRARY} ${Squirrel_STD_LIBRARY})
+
+    SET(INSTALL_BINDIR bin)
+
+    INSTALL(
+        TARGETS ${TARGET_NAME}
+        RUNTIME DESTINATION ${INSTALL_BINDIR}
+    )
+endif(Squirrel_FOUND AND Sqrat_FOUND)
 
 ####### BasicStatic (BasicStatic.cxx) #######
 SET(TARGET_SRC BasicStatic.cxx)

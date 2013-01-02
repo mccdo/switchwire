@@ -1,10 +1,13 @@
 #pragma once
 
 #include <switchwire/ConnectSignals.h>
+#include <switchwire/CompilerGuards.h>
 
 #include <squirrel.h>
+DIAG_OFF(unused-parameter)
 #include <sqrat.h>
 #include <sqrat/sqratVM.h>
+DIAG_ON(unused-parameter)
 
 ////////////////////////////////////////////////////////////////////////////////
 // This needs a ScopedScriptsList that stores a smart ptr to the Sqrat::Function

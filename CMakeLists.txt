@@ -21,10 +21,23 @@ set(Boost_USE_STATIC_RUNTIME    OFF)
 
 FIND_PACKAGE(Boost 1.44.0 REQUIRED COMPONENTS system)
 
+set( Squirrel_ROOT "Please specify" CACHE PATH "Root directory where Squirrel is installed" )
+FIND_PACKAGE(Squirrel 3.0.0)
+
+set( Sqrat_ROOT "Please specify" CACHE PATH "Root directory where Sqrat is installed" )
+FIND_PACKAGE(Sqrat 0.8)
+
 INCLUDE_DIRECTORIES( 
     ${Boost_INCLUDE_DIRS}
     ${POCO_INCLUDE_DIR}
 )
+
+if(Squirrel_FOUND AND Sqrat_FOUND)
+    INCLUDE_DIRECTORIES( 
+        ${Sqrat_INCLUDE_DIR}
+        ${Squirrel_INCLUDE_DIR}
+    )
+endif(Squirrel_FOUND AND Sqrat_FOUND)
 
 SET( CMAKE_BUILD_TYPE RelWithDebInfo )
 
