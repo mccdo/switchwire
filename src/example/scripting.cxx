@@ -22,7 +22,6 @@
 // to it.
 #include "ConnectScripts.h"
 #include "ExposeSignals.h"
-#include "SQStdVector.h"
 
 #include <switchwire/ConnectSignals.h>
 #include <switchwire/CompilerGuards.h>
