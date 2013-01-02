@@ -26,6 +26,8 @@
 // If you're just registering a signal but not connecting any slots in that
 // compilation unit, you only need <switchwire/EventManager.h>
 
+#include <iostream>
+
 void prt( int num )
 {
     std::cout << "prt: argument = " << num << std::endl;
