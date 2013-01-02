@@ -142,6 +142,7 @@ protected:
         // This is *not* how events are propagated to slots! This is strictly a
         // logging mechanism.
         EventManager::instance()->NotifySignalFiring( m_names );
+        return typename boost::function_traits<T>::result_type();
     }
 
 private:
