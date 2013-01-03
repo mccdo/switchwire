@@ -134,6 +134,11 @@ public:
         return reinterpret_cast<long unsigned int>( &signal );
     }
 
+    virtual std::string GetTypeString()
+    {
+        return std::string( typeid( T ).name() );
+    }
+
     boost::signals2::signal<T,C> signal; // intentionally left public!
 
 protected:

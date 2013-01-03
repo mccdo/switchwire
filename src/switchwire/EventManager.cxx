@@ -162,7 +162,7 @@ void EventManager::RegisterSignal( EventBase* sig, const std::string& sigName, S
     // If there's a reg. logger setup, give it the signal name
     if( m_registrationLogStream )
     {
-        m_registrationLogStream->fatal() << sigName << std::endl;
+        m_registrationLogStream->fatal() << sigName << " : " << sig->GetTypeString() << std::endl;
     }
 
     // Add this signal to the lookup table

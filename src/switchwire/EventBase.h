@@ -93,6 +93,12 @@ public:
     /// Allows derived types to connect to a logging mechanism
     virtual void EnableNotification( const std::string& name ) = 0;
 
+    /// Returns a "human-readable" version of the signal's signature type.
+    /// The contents of the string is compiler-dependent, and is more
+    /// "human-readable" on some platforms than on others. MSVC generally
+    /// outputs more descriptive text than GCC.
+    virtual std::string GetTypeString() = 0;
+
 protected:
     std::list< boost::weak_ptr< boost::signals2::scoped_connection > > mConnections;
 
