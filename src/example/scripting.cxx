@@ -20,8 +20,10 @@
 
 // The minimal set of headers required to register a signal and connect a slot
 // to it.
-#include "ConnectScripts.h"
-#include "ExposeSignals.h"
+#include <switchwire/squirrel/ConnectScripts.h>
+#include <switchwire/squirrel/ExposeSignals.h>
+#include <switchwire/squirrel/SQStdMap.h>
+#include <switchwire/squirrel/SQStdVector.h>
 
 #include <switchwire/ConnectSignals.h>
 #include <switchwire/CompilerGuards.h>
@@ -41,22 +43,13 @@ void printInt( int num )
     std::cout << "C++ print: " << num << std::endl;
 }
 ////////////////////////////////////////////////////////////////////////////////
-void SetupSignal( const char* signalName, const char* squirrelName )
-{
-    switchwire::Event< void(int) >* ev = new switchwire::Event<void(int)>;
-    std::string name;
-    name.assign( signalName );
-    switchwire::EventManager::instance()->RegisterSignal( ev, name );
-    name.assign( squirrelName );
-    ExposeSignal_1< void(int) >( ev, name, vm );
-}
-////////////////////////////////////////////////////////////////////////////////
 int main()
 {
     switchwire::ScopedConnectionList connections;
 
     Sqrat::DefaultVM::Set(vm.getVM());
-    Sqrat::RootTable().Func( "SetupSignal", &SetupSignal );
+    //Sqrat::RootTable().Func( "SetupSignal", &SetupSignal );
+    ExposeSignalType_1< void(int) >( "SetupVoidIntSignal", vm );
 
     switchwire::Event< void (int) > intSignal;
     switchwire::EventManager::instance()->
@@ -96,37 +89,12 @@ int main()
                           vm,
                           connections );
 
- // -------- This code should go into a library init function along with ---- //
- //          similar versions for std::vector, std::map, and maybe some others.
- //          It would be nice to come up with a good way to extend this
- //          functionality by registering new wrapper classes or something.
-    // Give Squirrel access to our std::string wrapper class
-//    Sqrat::RootTable().Bind( "SQStdString", Sqrat::Class< SQStdString >()
-//                             .Prop( "String", &SQStdString::Getc_str, &SQStdString::SetString )
-//                             .Prop( "StdString", &SQStdString::GetStdString, &SQStdString::SetStdString ));
- // ----------------------------------- end ------------------------------- //
+    // Make a std::vector<int> type available bound to name "IntVec"
+    BindSQStdVector< int >( "IntVec" );
 
-    typedef std::vector<int> vecint;
-    Sqrat::RootTable().Bind( "IntVec", Sqrat::Class< vecint >()
-                             .Func< int& (vecint::*)(size_t) >( "at", &vecint::at )
-                             .Func( "push_back", &vecint::push_back )
-                             .Func< size_t (vecint::*)() const >( "size", &vecint::size)
-                             .Func( "clear", &vecint::clear) );
+    // Make a std::map<int, std::string> type available bound to name "IntStringMap"
+    BindSQStdMap< int, std::string >( "IntStringMap" );
 
-//    typedef std::map< int, int > mapintint;
-//    Sqrat::RootTable().Bind( "IntIntMap", Sqrat::Class< mapintint >()
-//                             .Func(  )
-//                             .Func( "clear", &mapintint::clear) );
-
-
-
-
-//    typedef SQStdVector<int> vecint;
-//    Sqrat::RootTable().Bind( "IntVec", Sqrat::Class< vecint >()
-//                             .Func( "at", &vecint::at )
-//                             .Func( "push_back", &vecint::push_back )
-//                             .Func( "size", &vecint::size )
-//                             .Func( "clear", &vecint::clear ) );
 
     // Fire our signals
     intSignal.signal( 1 );

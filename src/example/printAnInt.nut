@@ -1,7 +1,14 @@
-// We've bound a C++ function called SetupSignal that can create, register, and expose
-// a void(int) signal with name ScriptIntSignal, bound here to the name MyScriptIntSignal.
-// Set one up, then fire it.
-SetupSignal( "ScriptIntSignal", "MyScriptIntSignal" );
+// We've bound a C++ class that creates, registers, and exposes a void(int)
+// signal. The class is bound to the name "SetupVoidIntSignal".
+// We use this class to setup a signal registered as ScriptIntSignal and bound
+// to the Squirrel name MyScriptIntSignal.
+VoidIntMaker <- SetupVoidIntSignal;
+VoidIntMaker.RegisterSignal( "ScriptIntSignal", "MyScriptIntSignal" );
+
+// We could set up more signals of void(int) type using the same VoidIntMaker
+// class, like this:
+// VoidIntMaker.RegisterSignal( "AnotherScriptIntSignal", "MySecondIntSignal" );
+
 print( "Squirrel script is about to call ScriptIntSignal with argument 8675309...\n" );
 MyScriptIntSignal.signal( 8675309 );
 
@@ -22,6 +29,13 @@ function prt(n)
     {
         print( iv.at( i ) + "\n" );
     }
+
+    mii <- IntStringMap();
+    mii.add( 1, "Zanzibar" );
+    mii.add( 2, "La Jolla" );
+    print( "\n" + mii.find( 2 ) + "\n" );
+    print( mii.find( 1 ) + "\n" );
+    print( mii.find( 3 ) + "\n" );
 
     // Now we're going to fire the signal that has been exposed with the name
     // THEstringSignal
