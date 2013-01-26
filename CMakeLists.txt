@@ -10,6 +10,10 @@ set(switchwire_SUB_VERSION 0)
 set(switchwire_VERSION ${switchwire_MAJOR_VERSION}.${switchwire_MINOR_VERSION}.${switchwire_SUB_VERSION})
 set(VES_PACKAGE_VERSION ${switchwire_VERSION})
 
+#Set the include directory so that switchwire can be used as a sub project
+set(switchwire_INCLUDE_DIRS "${PROJECT_SOURCE_DIR}/src" PARENT_SCOPE)
+set(switchwire_LIBRARIES "switchwire" PARENT_SCOPE)
+
 set( POCO_ROOT "Please specify" CACHE PATH "Root directory where POCO is installed" )
 FIND_PACKAGE(POCO 1.4.1 REQUIRED COMPONENTS PocoFoundation PocoUtil PocoData PocoDataSQLite)
 
