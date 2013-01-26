@@ -1,7 +1,7 @@
     
 #Lets us address our internal includes as <switchwire/foo.h>
 include_directories(
-        ${CMAKE_SOURCE_DIR}/src
+        ${PROJECT_SOURCE_DIR}/src
     )
 
 ADD_DEFINITIONS(-DSWITCHWIRE_LIBRARY)
@@ -14,7 +14,7 @@ set(VES_PUBLIC_HEADERS ${hdrs} )
 
 set(VES_TARGET_NAME switchwire)
 set(VES_TARGET_VERSION ${switchwire_VERSION})
-set(VES_TARGET_EXPORT ${CMAKE_PROJECT_NAME}-targets)
+set(VES_TARGET_EXPORT ${PROJECT_NAME}-targets)
 set(VES_TARGET_CATEGORY Lib)
 
 ADD_LIBRARY(${VES_TARGET_NAME} SHARED ${srcs} ${VES_PUBLIC_HEADERS})

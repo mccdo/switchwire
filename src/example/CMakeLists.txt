@@ -1,6 +1,6 @@
 #Lets us address our internal includes as <switchwire/foo.h>
 include_directories(
-        ${CMAKE_SOURCE_DIR}/src
+        ${PROJECT_SOURCE_DIR}/src
     )
 
 #FILE( GLOB srcs "*.cxx" )
