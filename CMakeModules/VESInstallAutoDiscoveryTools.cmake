@@ -3,7 +3,7 @@
 # =============================================
 
 # Add all targets to the build-tree export set
-export(TARGETS ${VES_EXPORT_LIBRARY_TARGETS}
+export(TARGETS ${VES_EXPORT_LIBRARY_TARGETS} APPEND
   FILE "${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR}/${PROJECT_NAME}LibraryDepends.cmake")
 
 # Export the package for use from the build-tree
