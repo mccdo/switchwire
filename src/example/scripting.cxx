@@ -47,10 +47,7 @@ int main()
 {
     switchwire::ScopedConnectionList connections;
 
-    Sqrat::DefaultVM::Set(vm.getVM());
-    //Sqrat::RootTable().Func( "SetupSignal", &SetupSignal );
-    ExposeSignalType_1< void(int) >( "SetupVoidIntSignal", vm );
-
+    // Create and register a couple of C++ signals.
     switchwire::Event< void (int) > intSignal;
     switchwire::EventManager::instance()->
             RegisterSignal( &intSignal , "ATestEvent" );
@@ -59,21 +56,31 @@ int main()
     switchwire::EventManager::instance()->
             RegisterSignal( &strSignal , "AStringEvent" );
 
-    // Create a squirrel virtual machine (VM) and set it as the default so
-    // all following code dealing with the vm doesn't have to specify which
-    // vm to talk to.
-    //Sqrat::SqratVM vm;
 
-    // Give squirrel access to intSignal and strSignal
+
+    // Set up a default Squirrel VM.
+    Sqrat::DefaultVM::Set(vm.getVM());
+
+    // Give squirrel access to intSignal and strSignal. That is, access to the
+    // *instances* of intSignal and strSignal created above
     ExposeSignal_1< void (int) >( &intSignal, "THEintSignal", vm );
     ExposeSignal_1< void (std::string) >( &strSignal, "THEstringSignal", vm );
 
+
+    // Expose a void(int) signal type. Squirrel scripts can now use the class
+    // "SetupVoidIntSignal" to create and register brand new signals with
+    // signature void(int).
+    ExposeSignalType_1< void(int) >( "SetupVoidIntSignal", vm );
+
+    // In the sample script, we use the "SetupVoidIntSignal" class to create
+    // and register a void(int) signal registered with name "ScriptIntSignal".
+    // We want to connect this script signal to a C++ slot:
     switchwire::ConnectSignalsStatic< void(int) >( "ScriptIntSignal",
                                                    &printInt,
                                                    connections );
 
 
-    // Connect script functions as slots
+    // We can also connect functions in scripts as slots:
     // Connect signal "ATestEvent" to the function "prt" in the squirrel script
     // "scripts/printAnInt.nut" in the VM "vm".
     ConnectScript_1< void(int) >( true, "ATestEvent",
@@ -82,14 +89,18 @@ int main()
                           vm,
                           connections );
 
-    // Do the same for prtStr
+    // Do the same for prtStr -- the first argument is a boolean indicating
+    // whether the script should be run after it is loaded. Scripts have to
+    // be run at least once after being loaded before we can bind to functions
+    // in them. In this case, we ran the script when we connected to the slot
+    // "prt", so we don't need to run this script again.
     ConnectScript_1< void(std::string) >( false, "AStringEvent",
                           "prtStr",
                           "scripts/printAnInt.nut",
                           vm,
                           connections );
 
-    // Make a std::vector<int> type available bound to name "IntVec"
+    // Make a std::vector<int> type available to scripts bound to name "IntVec"
     BindSQStdVector< int >( "IntVec" );
 
     // Make a std::map<int, std::string> type available bound to name "IntStringMap"
