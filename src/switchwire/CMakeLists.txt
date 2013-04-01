@@ -1,5 +1,7 @@
-    
 #Lets us address our internal includes as <switchwire/foo.h>
+
+configure_file( "${PROJECT_SOURCE_DIR}/src/switchwire/Version.h.in" "${PROJECT_SOURCE_DIR}/src/switchwire/Version.h" @ONLY)
+
 include_directories(
         ${PROJECT_SOURCE_DIR}/src
     )

@@ -45,7 +45,11 @@ if(Squirrel_FOUND AND Sqrat_FOUND)
     )
 endif(Squirrel_FOUND AND Sqrat_FOUND)
 
-SET( CMAKE_BUILD_TYPE RelWithDebInfo )
+set(HAVE_SQUIRREL 0)
+if(Squirrel_FOUND)
+    set(HAVE_SQUIRREL 1)
+endif(Squirrel_FOUND)
+#SET( CMAKE_BUILD_TYPE RelWithDebInfo )
 
 option(BUILD_EXAMPLE "Build example?" ON)
 

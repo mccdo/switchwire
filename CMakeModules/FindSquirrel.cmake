@@ -19,6 +19,7 @@ FIND_LIBRARY(Squirrel_STD_LIBRARY NAMES sqstdlib
 #    MESSAGE(SEND_ERROR "Squirrel not found")
 #ENDIF(NOT Squirrel_STD_LIBRARY)
 
+SET(Squirrel_FOUND FALSE)
 IF(Squirrel_INCLUDE_DIR AND Squirrel_STD_LIBRARY)
    SET(Squirrel_FOUND TRUE)
 ENDIF(Squirrel_INCLUDE_DIR AND Squirrel_STD_LIBRARY)
