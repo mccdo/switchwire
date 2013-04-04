@@ -17,7 +17,7 @@ if( NOT(${CMAKE_PROJECT_NAME} STREQUAL ${PROJECT_NAME}) )
 endif()
 
 set( POCO_ROOT "Please specify" CACHE PATH "Root directory where POCO is installed" )
-FIND_PACKAGE(POCO 1.4.1 REQUIRED COMPONENTS PocoFoundation PocoUtil PocoData PocoDataSQLite)
+FIND_PACKAGE(POCO 1.4.1 REQUIRED COMPONENTS PocoFoundation PocoUtil PocoXML PocoData PocoDataSQLite)
 
 set(BOOST_INCLUDEDIR "$ENV{BOOST_INSTALL_DIR}/include" CACHE PATH "docstring")
 
