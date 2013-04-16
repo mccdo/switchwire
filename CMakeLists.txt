@@ -41,21 +41,43 @@ INCLUDE_DIRECTORIES(
 if(Squirrel_FOUND AND Sqrat_FOUND)
     INCLUDE_DIRECTORIES( 
         ${Sqrat_INCLUDE_DIR}
-        ${Squirrel_INCLUDE_DIR}
-    )
+        ${Squirrel_INCLUDE_DIR})
 endif(Squirrel_FOUND AND Sqrat_FOUND)
-
-set(HAVE_SQUIRREL 0)
-if(Squirrel_FOUND)
-    set(HAVE_SQUIRREL 1)
-endif(Squirrel_FOUND)
-#SET( CMAKE_BUILD_TYPE RelWithDebInfo )
 
 option(BUILD_EXAMPLE "Build example?" ON)
 
 include(VESSetupCompiler)
 
 include(VESBinAndLibDirs)
+
+set(HAVE_SQUIRREL 0)
+if(Squirrel_FOUND AND Sqrat_FOUND)
+    set(HAVE_SQUIRREL 1)
+    #file(READ ${Squirrel_INCLUDE_DIR}/squirrel.h CURRENT_CONFIG)
+    #string(REGEX MATCH "\#define SQUIRREL_VERSION_NUMBER" SQUIRREL_VERSION ${CURRENT_CONFIG})
+    #message( "${SQUIRREL_VERSION}")
+    #set(squirrel_VERSION 304)
+    #set(sqrat_VERSION 304)
+    set(squirrel_FPC_PREFIX ${Squirrel_ROOT})
+    set(sqrat_FPC_PREFIX ${Sqrat_ROOT})
+    set(switchwire_DEPS "squirrel sqrat")
+
+    if(WIN32)
+        set(sqrat_FPC_INCLUDES "/I\"\${includedir}\"")
+        set(squirrel_FPC_INCLUDES "/I\"\${includedir}\"")
+        set(switchwire_FPC_LIBRARIES "/libpath:\"\${libdir}\" ${Squirrel_LIBRARY} ${Squirrel_STD_LIBRARY}")
+    else(WIN32)
+        set(sqrat_FPC_INCLUDES "-I\${includedir}")
+        set(squirrel_FPC_INCLUDES "-I\${includedir}")
+        set(squirrel_FPC_LIBRARIES "${Squirrel_LIBRARY} ${Squirrel_STD_LIBRARY}")
+    endif(WIN32)
+    configure_file( "${CMAKE_CURRENT_SOURCE_DIR}/extra/squirrel.fpc.in" "${CMAKE_CURRENT_BINARY_DIR}/lib/flagpoll/squirrel.fpc" @ONLY)
+    configure_file( "${CMAKE_CURRENT_SOURCE_DIR}/extra/sqrat.fpc.in" "${CMAKE_CURRENT_BINARY_DIR}/lib/flagpoll/sqrat.fpc" @ONLY)
+    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR}/flagpoll/squirrel.fpc
+        DESTINATION ${CMAKE_INSTALL_LIBDIR}/flagpoll )
+    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR}/flagpoll/sqrat.fpc
+        DESTINATION ${CMAKE_INSTALL_LIBDIR}/flagpoll )
+endif(Squirrel_FOUND AND Sqrat_FOUND)
 
 add_subdirectory(src)
 

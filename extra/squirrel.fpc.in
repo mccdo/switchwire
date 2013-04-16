@@ -1,0 +1,15 @@
+prefix=@squirrel_FPC_PREFIX@
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: squirrel
+Description: squirrel release pre-compiled for VES
+Provides: squirrel
+Requires:
+Version: @squirrel_VERSION@
+Libs: @squirrel_FPC_LIBRARIES@
+Cflags: @squirrel_FPC_INCLUDES@
+Arch: noarch
+
+

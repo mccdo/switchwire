@@ -1,0 +1,15 @@
+prefix=@sqrat_FPC_PREFIX@
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: sqrat
+Description: sqrat release pre-compiled for VES
+Provides: sqrat
+Requires:
+Version: @sqrat_VERSION@
+Libs: @sqrat_FPC_LIBRARIES@
+Cflags: @sqrat_FPC_INCLUDES@
+Arch: noarch
+
+
