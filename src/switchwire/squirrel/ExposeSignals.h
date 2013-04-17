@@ -4,7 +4,7 @@
 
 #include <squirrel.h>
 #include <sqrat.h>
-#include <sqrat/sqratVM.h>
+//#include <sqrat/sqratVM.h>
 
 #include <boost/type_traits.hpp>
 

@@ -31,7 +31,7 @@
 #include <squirrel.h>
 DIAG_OFF(unused-parameter)
 #include <sqrat.h>
-#include <sqrat/sqratVM.h>
+//#include <sqrat/sqratVM.h>
 DIAG_ON(unused-parameter)
 
 #include <vector>
