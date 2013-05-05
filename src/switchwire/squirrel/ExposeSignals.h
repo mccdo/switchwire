@@ -352,6 +352,72 @@ public:
     Sqrat::SqratVM* m_vm;
 };
 ////////////////////////////////////////////////////////////////////////////////
+template< class TT >
+class SetupSignal_3
+{
+public:
+    void Create( const char* signalName, const char* squirrelName )
+    {
+        switchwire::Event< TT >* ev = new switchwire::Event< TT >;
+        std::string name;
+        name.assign( signalName );
+        switchwire::EventManager::instance()->RegisterSignal( ev, name );
+        name.assign( squirrelName );
+        ExposeSignal_3< TT >( ev, name, *m_vm );
+    }
+
+    void SetVm( Sqrat::SqratVM& vm )
+    {
+        m_vm = &vm;
+    }
+
+    Sqrat::SqratVM* m_vm;
+};
+////////////////////////////////////////////////////////////////////////////////
+template< class TT >
+class SetupSignal_4
+{
+public:
+    void Create( const char* signalName, const char* squirrelName )
+    {
+        switchwire::Event< TT >* ev = new switchwire::Event< TT >;
+        std::string name;
+        name.assign( signalName );
+        switchwire::EventManager::instance()->RegisterSignal( ev, name );
+        name.assign( squirrelName );
+        ExposeSignal_4< TT >( ev, name, *m_vm );
+    }
+
+    void SetVm( Sqrat::SqratVM& vm )
+    {
+        m_vm = &vm;
+    }
+
+    Sqrat::SqratVM* m_vm;
+};
+////////////////////////////////////////////////////////////////////////////////
+template< class TT >
+class SetupSignal_5
+{
+public:
+    void Create( const char* signalName, const char* squirrelName )
+    {
+        switchwire::Event< TT >* ev = new switchwire::Event< TT >;
+        std::string name;
+        name.assign( signalName );
+        switchwire::EventManager::instance()->RegisterSignal( ev, name );
+        name.assign( squirrelName );
+        ExposeSignal_5< TT >( ev, name, *m_vm );
+    }
+
+    void SetVm( Sqrat::SqratVM& vm )
+    {
+        m_vm = &vm;
+    }
+
+    Sqrat::SqratVM* m_vm;
+};
+////////////////////////////////////////////////////////////////////////////////
 template< typename T >
 void ExposeSignalType_0( const std::string& squirrelSignalTypeName,
                          Sqrat::SqratVM& vm )
@@ -393,3 +459,46 @@ void ExposeSignalType_2( const std::string& squirrelSignalTypeName,
     setup->SetVm( vm );
     Sqrat::RootTable().SetInstance( squirrelSignalTypeName.c_str(), setup );
 }
+////////////////////////////////////////////////////////////////////////////////
+template< typename T >
+void ExposeSignalType_3( const std::string& squirrelSignalTypeName,
+                         Sqrat::SqratVM& vm )
+{
+    Sqrat::DefaultVM::Set(vm.getVM());
+    typedef SetupSignal_3< T > setupType;
+    Sqrat::RootTable().Bind( squirrelSignalTypeName.c_str(), Sqrat::Class< setupType >()
+                             .Func( "RegisterSignal", &setupType::Create ) );
+
+    setupType* setup = new setupType;
+    setup->SetVm( vm );
+    Sqrat::RootTable().SetInstance( squirrelSignalTypeName.c_str(), setup );
+}
+////////////////////////////////////////////////////////////////////////////////
+template< typename T >
+void ExposeSignalType_4( const std::string& squirrelSignalTypeName,
+                         Sqrat::SqratVM& vm )
+{
+    Sqrat::DefaultVM::Set(vm.getVM());
+    typedef SetupSignal_4< T > setupType;
+    Sqrat::RootTable().Bind( squirrelSignalTypeName.c_str(), Sqrat::Class< setupType >()
+                             .Func( "RegisterSignal", &setupType::Create ) );
+
+    setupType* setup = new setupType;
+    setup->SetVm( vm );
+    Sqrat::RootTable().SetInstance( squirrelSignalTypeName.c_str(), setup );
+}
+////////////////////////////////////////////////////////////////////////////////
+template< typename T >
+void ExposeSignalType_5( const std::string& squirrelSignalTypeName,
+                         Sqrat::SqratVM& vm )
+{
+    Sqrat::DefaultVM::Set(vm.getVM());
+    typedef SetupSignal_5< T > setupType;
+    Sqrat::RootTable().Bind( squirrelSignalTypeName.c_str(), Sqrat::Class< setupType >()
+                             .Func( "RegisterSignal", &setupType::Create ) );
+
+    setupType* setup = new setupType;
+    setup->SetVm( vm );
+    Sqrat::RootTable().SetInstance( squirrelSignalTypeName.c_str(), setup );
+}
+////////////////////////////////////////////////////////////////////////////////
