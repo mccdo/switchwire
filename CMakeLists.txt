@@ -71,8 +71,8 @@ if(Squirrel_FOUND AND Sqrat_FOUND)
         set(squirrel_FPC_INCLUDES "-I\${includedir}")
         set(squirrel_FPC_LIBRARIES "${Squirrel_LIBRARY} ${Squirrel_STD_LIBRARY}")
     endif(WIN32)
-    configure_file( "${CMAKE_CURRENT_SOURCE_DIR}/extra/squirrel.fpc.in" "${CMAKE_CURRENT_BINARY_DIR}/lib/flagpoll/squirrel.fpc" @ONLY)
-    configure_file( "${CMAKE_CURRENT_SOURCE_DIR}/extra/sqrat.fpc.in" "${CMAKE_CURRENT_BINARY_DIR}/lib/flagpoll/sqrat.fpc" @ONLY)
+    configure_file( "${CMAKE_CURRENT_SOURCE_DIR}/extra/squirrel.fpc.in" "${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR}/flagpoll/squirrel.fpc" @ONLY)
+    configure_file( "${CMAKE_CURRENT_SOURCE_DIR}/extra/sqrat.fpc.in" "${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR}/flagpoll/sqrat.fpc" @ONLY)
     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR}/flagpoll/squirrel.fpc
         DESTINATION ${CMAKE_INSTALL_LIBDIR}/flagpoll )
     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR}/flagpoll/sqrat.fpc
