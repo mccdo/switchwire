@@ -30,6 +30,10 @@
 #include <switchwire/SlotWrapper.h>
 #include <switchwire/ScopedConnectionList.h>
 
+#ifdef __GNUG__
+#include <cxxabi.h>
+#endif
+
 namespace switchwire
 {
 /// @file Event.h
@@ -67,6 +71,9 @@ public:
     {
     }
 
+    /// Attempts to connect the signal stored in this class to the slot passed
+    /// in as @c slot. Returns true if connection was successfully made; false
+    /// otherwise.
     virtual bool ConnectSlot( SlotWrapperBasePtr slot,
                               ScopedConnectionList& connections,
                               int priority )
@@ -128,20 +135,34 @@ public:
         }
     }
 
-    // This function exists for debugging and failure logging purposes.
+    /// This function exists for debugging and failure logging purposes.
     virtual long unsigned int GetSignalAddress()
     {
         return reinterpret_cast<long unsigned int>( &signal );
     }
 
+    /// Returns the RTTI info of the signal. Useful for inspecting signal types
+    /// and logging.
     virtual std::string GetTypeString()
     {
+#ifdef __GNUG__
+        int status;
+        char* realname;
+        realname = abi::__cxa_demangle( typeid( T ).name(), 0, 0, &status );
+        std::string result( realname );
+        free( realname );
+        return result;
+#else
         return std::string( typeid( T ).name() );
+#endif
     }
 
-    boost::signals2::signal<T,C> signal; // intentionally left public!
+    /// The raw boost signal, publically accessible since this is the way we
+    /// directly invoke the signal.
+    boost::signals2::signal<T,C> signal;
 
 protected:
+    /// Mechanism to log all invocations of this slot
     typename boost::function_traits<T>::result_type LogSlot()
     {
         // This is *not* how events are propagated to slots! This is strictly a
@@ -151,6 +172,7 @@ protected:
     }
 
 private:
+    /// Stores all names associated with this event
     std::vector< std::string > m_names;
 };
 ////////////////////////////////////////////////////////////////////////////////
