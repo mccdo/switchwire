@@ -25,8 +25,16 @@ set(VES_TARGET_VERSION ${switchwire_VERSION})
 set(VES_TARGET_EXPORT ${PROJECT_NAME}-targets)
 set(VES_TARGET_CATEGORY Lib)
 
+if(Squirrel_FOUND AND Sqrat_FOUND)
+    if(APPLE)
+        set(squirrel_static_lib -Wl,-all_load ${Squirrel_LIBRARY})
+    elseif(CMAKE_COMPILER_IS_GNUCXX)
+        set(squirrel_static_lib -Wl,-whole-archive ${Squirrel_LIBRARY} -Wl,-no_whole-archive)
+    endif()
+endif(Squirrel_FOUND AND Sqrat_FOUND)
+
 ADD_LIBRARY(${VES_TARGET_NAME} SHARED ${srcs} ${VES_PUBLIC_HEADERS})
-TARGET_LINK_LIBRARIES(${VES_TARGET_NAME} ${switchwire_LIBS} ${POCO_LIBRARIES})
+TARGET_LINK_LIBRARIES(${VES_TARGET_NAME} ${switchwire_LIBS} ${POCO_LIBRARIES} ${squirrel_static_lib})
 
 include(VESModuleInstall)
 
