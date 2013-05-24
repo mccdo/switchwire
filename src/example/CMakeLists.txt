@@ -30,7 +30,11 @@ if(Squirrel_FOUND AND Sqrat_FOUND)
     SET(TARGET_SRC scripting.cxx)
     SET(TARGET_NAME Scripting)
     ADD_EXECUTABLE(${TARGET_NAME} ${TARGET_SRC})
-    TARGET_LINK_LIBRARIES(${TARGET_NAME} switchwire ${Squirrel_LIBRARY} ${Squirrel_STD_LIBRARY})
+    if(MSVC)
+        target_link_libraries(${TARGET_NAME} switchwire ${Squirrel_LIBRARY} ${Squirrel_STD_LIBRARY})
+    else()
+        TARGET_LINK_LIBRARIES(${TARGET_NAME} switchwire)
+    endif()
 
     SET(INSTALL_BINDIR bin)
 
