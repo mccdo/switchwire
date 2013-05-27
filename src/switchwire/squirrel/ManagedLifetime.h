@@ -18,16 +18,15 @@
  *
  *************** <auto-copyright.rb END do not edit this line> ***************/
 #pragma once
-#include <vector>
-#include <string>
+#include <boost/shared_ptr.hpp>
 
-template< typename T >
-void BindSQStdVector( const std::string& squirrelClassName )
+namespace switchwire
 {
-    typedef typename std::vector<T> vecType;
-    Sqrat::RootTable().Bind( squirrelClassName.c_str(), Sqrat::Class< vecType >()
-                             .template Func< T& (vecType::*)(size_t) >( "at", &vecType::at )
-                             .Func( "push_back", &vecType::push_back )
-                             .template Func< size_t (vecType::*)() const >( "size", &vecType::size)
-                             .Func( "clear", &vecType::clear) );
-}
+
+/// Inherit from this class to allow a ManagedLifetimePtr of your class to be
+/// stored in a container class for easy lifetime management.
+class ManagedLifetime{ };
+
+typedef boost::shared_ptr< ManagedLifetime > ManagedLifetimePtr;
+
+} // namespace switchwire

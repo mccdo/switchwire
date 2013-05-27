@@ -1,56 +1,47 @@
+/*************** <auto-copyright.rb BEGIN do not edit this line> **************
+ *
+ * Copyright 2012-2012 by Ames Laboratory
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License version 2.1 as published by the Free Software Foundation.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public
+ * License along with this library; if not, write to the
+ * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ * Boston, MA 02111-1307, USA.
+ *
+ *************** <auto-copyright.rb END do not edit this line> ***************/
 #pragma once
 
 #include <switchwire/ConnectSignals.h>
 #include <switchwire/CompilerGuards.h>
 
-#include <squirrel.h>
-DIAG_OFF(unused-parameter)
-#include <sqrat.h>
-#include <sqrat/sqratVM.h>
-DIAG_ON(unused-parameter)
+#include <switchwire/squirrel/SquirrelContext.h>
 
+namespace switchwire
+{
 ////////////////////////////////////////////////////////////////////////////////
-#define SW_REPETETIVE_SCRIPT_CONNECTIONCODE Sqrat::DefaultVM::Set( vm.getVM() );\
-    \
-    try\
-    {\
-        Sqrat::Script script;\
-        script.CompileFile( scriptPath );\
-        if( runScript )\
-        {\
-            script.Run();\
-        }\
-    }\
-    catch( Sqrat::Exception& e )\
-    {\
-        std::cout << "Sqrat exception: " << e.Message() << std::endl << std::flush;\
-        return;\
-    }\
-    catch( ... )\
-    {\
-        std::cout << "Unspecified Sqrat exception" << std::endl << std::flush;\
-        return;\
-    }\
-    \
-    \
-    Sqrat::Function* sqFunc = new Sqrat::Function( Sqrat::RootTable().\
-                             GetFunction( scriptFunctionName.c_str() ) )
+#define SW_REPETETIVE_SCRIPT_CONNECTIONCODE Sqrat::DefaultVM::Set( vm.GetVM().getVM() );\
+    SqratFunctionPtr sqFunc = SqratFunctionPtr( new Sqrat::Function( Sqrat::RootTable().\
+                      GetFunction( scriptFunctionName.c_str() ) ) );\
+    vm.StoreSqratFunction( sqFunc )
 ////////////////////////////////////////////////////////////////////////////////
-#define SW_CONNECTSCRIPT_ARG_LIST bool runScript,\
-    const std::string& signalPattern,\
+#define SW_CONNECTSCRIPT_ARG_LIST const std::string& signalPattern,\
     const std::string& scriptFunctionName,\
-    const std::string& scriptPath,\
-    Sqrat::SqratVM& vm,\
-    switchwire::ScopedConnectionList& connections,\
-    switchwire::EventManager::SignalType signalType = switchwire::EventManager::any_SignalType,\
-    switchwire::EventManager::Priority priority = switchwire::EventManager::normal_Priority )
+    SquirrelContext& vm )
 
 #define SW_CONNECTSIG_ARG_LIST signalPattern,\
     &Sqrat::Function::Execute,\
-    sqFunc,\
-    connections,\
-    signalType,\
-    priority
+    sqFunc.get(),\
+    vm.GetConnections(),\
+    EventManager::any_SignalType,\
+    EventManager::normal_Priority
 ////////////////////////////////////////////////////////////////////////////////
 
 
@@ -104,10 +95,4 @@ void ConnectScript_5( SW_CONNECTSCRIPT_ARG_LIST
     switchwire::ConnectSignals_5< Signature, Sqrat::Function >( SW_CONNECTSIG_ARG_LIST );
 }
 ////////////////////////////////////////////////////////////////////////////////
-//template< class Signature >
-//class ExposeSlotType_1( Sqrat::SqratVM& vm, switchwire::ScopedConnectionList& connections )
-//{
-
-//};
-
-////////////////////////////////////////////////////////////////////////////////
+} // namespace switchwire

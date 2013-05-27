@@ -18,16 +18,10 @@
  *
  *************** <auto-copyright.rb END do not edit this line> ***************/
 #pragma once
-#include <vector>
-#include <string>
 
-template< typename T >
-void BindSQStdVector( const std::string& squirrelClassName )
-{
-    typedef typename std::vector<T> vecType;
-    Sqrat::RootTable().Bind( squirrelClassName.c_str(), Sqrat::Class< vecType >()
-                             .template Func< T& (vecType::*)(size_t) >( "at", &vecType::at )
-                             .Func( "push_back", &vecType::push_back )
-                             .template Func< size_t (vecType::*)() const >( "size", &vecType::size)
-                             .Func( "clear", &vecType::clear) );
-}
+// This is a convenience header for including the three event-related
+// scripting headers in one shot.
+
+#include <switchwire/squirrel/ConnectScripts.h>
+#include <switchwire/squirrel/ExposeSignals.h>
+#include <switchwire/squirrel/ExposeSlots.h>
