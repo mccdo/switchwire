@@ -20,7 +20,13 @@
 #pragma once
 
 #include <boost/shared_ptr.hpp>
+
+#include <switchwire/CompilerGuards.h>
+DIAG_OFF(format)
+DIAG_OFF(unused-parameter)
 #include <sqrat.h>
+DIAG_ON(unused-parameter)
+DIAG_OFF(format)
 
 namespace switchwire
 {

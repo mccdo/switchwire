@@ -25,10 +25,12 @@
 
 #include <cstdio> // This is required because sqratVM.h fails to properly
                   // include it and their release cycle is unspecified.
+DIAG_OFF(format)
 DIAG_OFF(unused-parameter)
 #include <sqrat.h>
 #include <sqrat/sqratVM.h>
 DIAG_ON(unused-parameter)
+DIAG_ON(format)
 
 #include <string>
 #include <vector>
