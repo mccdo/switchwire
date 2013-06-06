@@ -35,6 +35,13 @@ using boost::weak_ptr;
 using boost::signals2::scoped_connection;
 using boost::signals2::shared_connection_block;
 
+#include <Poco/Version.h>
+#if POCO_VERSION > 01050000
+    #define POCO_KEYWORD_NAMESPACE Poco::Data::Keywords::
+#else
+    #define POCO_KEYWORD_NAMESPACE Poco::Data::
+#endif
+
 //#define DEBUG_DESTRUCTOR
 
 namespace switchwire
@@ -65,12 +72,12 @@ EventManager::EventManager():
     Poco::Data::SQLite::Connector::registerConnector();
     mSession = new Poco::Data::Session( "SQLite", ":memory:" );
     ( *mSession ) << "CREATE TABLE signals (id INTEGER PRIMARY KEY, name TEXT, type INTEGER)",
-            Poco::Data::now;
+            POCO_KEYWORD_NAMESPACE now;
 
     // Create a table to store slots that have requested connection to a certain signal
     // or signal pattern that hasn't been registered yet
     ( *mSession ) << "CREATE TABLE slots (id INTEGER PRIMARY KEY, mapID INTEGER, pattern TEXT, type INTEGER, priority INTEGER)",
-            Poco::Data::now;
+            POCO_KEYWORD_NAMESPACE now;
 }
 ////////////////////////////////////////////////////////////////////////////////
 EventManager::~EventManager()
@@ -187,18 +194,18 @@ void EventManager::RegisterSignal( EventBase* sig, const std::string& sigName, S
             }
 
             ( *mSession ) << "UPDATE signals SET type=:type WHERE name=:name",
-                    Poco::Data::use( sigType ),
-                    Poco::Data::use( sigName ),
-                    Poco::Data::now;
+                    POCO_KEYWORD_NAMESPACE use( sigType ),
+                    POCO_KEYWORD_NAMESPACE useRef( sigName ),
+                    POCO_KEYWORD_NAMESPACE now;
         }
         else
         {
             SW_LOG_DEBUG( "RegisterSignal: Registering new signal " << sigName );
 
             ( *mSession ) << "INSERT INTO signals (name, type) VALUES (:name,:type)",
-                    Poco::Data::use( sigName ),
-                    Poco::Data::use( sigType ),
-                    Poco::Data::now;
+                    POCO_KEYWORD_NAMESPACE useRef( sigName ),
+                    POCO_KEYWORD_NAMESPACE use( sigType ),
+                    POCO_KEYWORD_NAMESPACE now;
         }
     }
     catch( Poco::Data::DataException& ex )
@@ -241,8 +248,8 @@ void EventManager::ConnectToPreviousSlots( const std::string& sigName )
             try
             {
                 ( *mSession ) << "DELETE FROM slots WHERE mapID=:id",
-                        Poco::Data::use( *idsIter ),
-                        Poco::Data::now;
+                        POCO_KEYWORD_NAMESPACE use( *idsIter ),
+                        POCO_KEYWORD_NAMESPACE now;
             }
             catch( Poco::Data::DataException& ex )
             {
@@ -293,8 +300,8 @@ void EventManager::_ConnectSignal( const std::string& sigName,
                       << sigName << "\"" );
             mSignals.erase( iter );
             ( *mSession ) << "DELETE FROM signals where name=:name",
-                    Poco::Data::use( sigName ),
-                    Poco::Data::now;
+                    POCO_KEYWORD_NAMESPACE useRef( sigName ),
+                    POCO_KEYWORD_NAMESPACE now;
             return;
         }
 
@@ -381,11 +388,11 @@ void EventManager::StoreSlot( const std::string& sigName,
     try
     {
         ( *mSession ) << "INSERT INTO slots (mapID, pattern, type, priority) VALUES (:id,:pattern,:type,:priority)",
-                Poco::Data::use( mMonotonicID ),
-                Poco::Data::use( sigName ),
-                Poco::Data::use( type ),
-                Poco::Data::use( priority ),
-                Poco::Data::now;
+                POCO_KEYWORD_NAMESPACE use( mMonotonicID ),
+                POCO_KEYWORD_NAMESPACE useRef( sigName ),
+                POCO_KEYWORD_NAMESPACE use( type ),
+                POCO_KEYWORD_NAMESPACE use( priority ),
+                POCO_KEYWORD_NAMESPACE now;
     }
     catch( Poco::Data::DataException& ex )
     {
@@ -404,13 +411,13 @@ void EventManager::GetMatches( const std::string stringToMatch, SignalType sigTy
     {
         Poco::Data::Statement statement( *mSession );
         statement << "SELECT name FROM signals WHERE name LIKE :name",
-                Poco::Data::use( stringToMatch );
+                POCO_KEYWORD_NAMESPACE useRef( stringToMatch );
         if( sigType != any_SignalType )
         {
             statement << " AND type=:type",
-                    Poco::Data::use( sigType );
+                    POCO_KEYWORD_NAMESPACE use( sigType );
         }
-        statement, Poco::Data::into( names );
+        statement, POCO_KEYWORD_NAMESPACE into( names );
         statement.execute();
     }
     catch( Poco::Data::DataException& ex )
@@ -427,16 +434,16 @@ void EventManager::GetSlotMatches( const std::string& sigName, std::vector< int 
     {
         Poco::Data::Statement statement( *mSession );
         statement << "SELECT mapID FROM slots WHERE :pattern LIKE pattern",
-                Poco::Data::use( sigName ),
-                Poco::Data::into( ids );
+                POCO_KEYWORD_NAMESPACE useRef( sigName ),
+                POCO_KEYWORD_NAMESPACE into( ids );
         statement.execute();
         int priority = 3;
         for( size_t count = 0; count < ids.size(); ++count )
         {
             ( *mSession ) << "SELECT priority FROM slots WHERE mapID=:id",
-            Poco::Data::use( ids.at( count ) ),
-            Poco::Data::into( priority ),
-            Poco::Data::now;
+            POCO_KEYWORD_NAMESPACE use( ids.at( count ) ),
+            POCO_KEYWORD_NAMESPACE into( priority ),
+            POCO_KEYWORD_NAMESPACE now;
             priorities.push_back( priority );
         }
     }
@@ -544,8 +551,8 @@ void EventManager::CleanupSlotMemory()
             try
             {
                 ( *mSession ) << "DELETE FROM slots WHERE mapID=:id",
-                        Poco::Data::use( slotID ),
-                        Poco::Data::now;
+                        POCO_KEYWORD_NAMESPACE use( slotID ),
+                        POCO_KEYWORD_NAMESPACE now;
             }
             catch( Poco::Data::DataException& ex )
             {
