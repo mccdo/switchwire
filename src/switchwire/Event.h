@@ -19,7 +19,12 @@
  *************** <auto-copyright.rb END do not edit this line> ***************/
 #pragma once
 
+#include <switchwire/CompilerGuards.h>
+
+DIAG_OFF(unused-parameter)
 #include<boost/signals2/signal.hpp>
+DIAG_ON(unused-parameter)
+
 #include<boost/function.hpp>
 #include<boost/type_traits.hpp>
 #include<boost/shared_ptr.hpp>
