@@ -36,7 +36,7 @@ using boost::signals2::scoped_connection;
 using boost::signals2::shared_connection_block;
 
 #include <Poco/Version.h>
-#if POCO_VERSION > 01050000
+#if POCO_VERSION > 0x01050000
     #define POCO_KEYWORD_NAMESPACE Poco::Data::Keywords::
 #else
     #define POCO_KEYWORD_NAMESPACE Poco::Data::
@@ -195,7 +195,11 @@ void EventManager::RegisterSignal( EventBase* sig, const std::string& sigName, S
 
             ( *mSession ) << "UPDATE signals SET type=:type WHERE name=:name",
                     POCO_KEYWORD_NAMESPACE use( sigType ),
+#if POCO_VERSION > 0x01050000
                     POCO_KEYWORD_NAMESPACE useRef( sigName ),
+#else
+                    POCO_KEYWORD_NAMESPACE use( sigName ),
+#endif
                     POCO_KEYWORD_NAMESPACE now;
         }
         else
@@ -203,7 +207,11 @@ void EventManager::RegisterSignal( EventBase* sig, const std::string& sigName, S
             SW_LOG_DEBUG( "RegisterSignal: Registering new signal " << sigName );
 
             ( *mSession ) << "INSERT INTO signals (name, type) VALUES (:name,:type)",
+#if POCO_VERSION > 0x01050000
                     POCO_KEYWORD_NAMESPACE useRef( sigName ),
+#else
+                    POCO_KEYWORD_NAMESPACE use( sigName ),
+#endif
                     POCO_KEYWORD_NAMESPACE use( sigType ),
                     POCO_KEYWORD_NAMESPACE now;
         }
@@ -300,7 +308,11 @@ void EventManager::_ConnectSignal( const std::string& sigName,
                       << sigName << "\"" );
             mSignals.erase( iter );
             ( *mSession ) << "DELETE FROM signals where name=:name",
+#if POCO_VERSION > 0x01050000
                     POCO_KEYWORD_NAMESPACE useRef( sigName ),
+#else
+                    POCO_KEYWORD_NAMESPACE use( sigName ),
+#endif
                     POCO_KEYWORD_NAMESPACE now;
             return;
         }
@@ -389,7 +401,11 @@ void EventManager::StoreSlot( const std::string& sigName,
     {
         ( *mSession ) << "INSERT INTO slots (mapID, pattern, type, priority) VALUES (:id,:pattern,:type,:priority)",
                 POCO_KEYWORD_NAMESPACE use( mMonotonicID ),
-                POCO_KEYWORD_NAMESPACE useRef( sigName ),
+#if POCO_VERSION > 0x01050000
+                    POCO_KEYWORD_NAMESPACE useRef( sigName ),
+#else
+                    POCO_KEYWORD_NAMESPACE use( sigName ),
+#endif
                 POCO_KEYWORD_NAMESPACE use( type ),
                 POCO_KEYWORD_NAMESPACE use( priority ),
                 POCO_KEYWORD_NAMESPACE now;
@@ -411,7 +427,11 @@ void EventManager::GetMatches( const std::string stringToMatch, SignalType sigTy
     {
         Poco::Data::Statement statement( *mSession );
         statement << "SELECT name FROM signals WHERE name LIKE :name",
-                POCO_KEYWORD_NAMESPACE useRef( stringToMatch );
+#if POCO_VERSION > 0x01050000
+                    POCO_KEYWORD_NAMESPACE useRef( stringToMatch );
+#else
+                    POCO_KEYWORD_NAMESPACE use( stringToMatch );
+#endif
         if( sigType != any_SignalType )
         {
             statement << " AND type=:type",
@@ -434,7 +454,11 @@ void EventManager::GetSlotMatches( const std::string& sigName, std::vector< int 
     {
         Poco::Data::Statement statement( *mSession );
         statement << "SELECT mapID FROM slots WHERE :pattern LIKE pattern",
-                POCO_KEYWORD_NAMESPACE useRef( sigName ),
+#if POCO_VERSION > 0x01050000
+                    POCO_KEYWORD_NAMESPACE useRef( sigName ),
+#else
+                    POCO_KEYWORD_NAMESPACE use( sigName ),
+#endif
                 POCO_KEYWORD_NAMESPACE into( ids );
         statement.execute();
         int priority = 3;
