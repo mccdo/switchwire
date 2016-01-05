@@ -77,7 +77,7 @@ template< typename K, typename V >
 void BindSQStdMap( const std::string& squirrelClassName )
 {
     typedef SQStdMap< K, V > mapType;
-    Sqrat::RootTable().Bind( squirrelClassName.c_str(), Sqrat::Class< mapType >()
+    Sqrat::RootTable().Bind( squirrelClassName.c_str(), Sqrat::Class< mapType >( Sqrat::DefaultVM::Get(), squirrelClassName )
                              .Func( "add", &mapType::add )
                              .Func( "get", &mapType::get )
                              .Func( "find", &mapType::find )
