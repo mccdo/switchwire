@@ -101,9 +101,9 @@ void ExposeSlotType_1( const std::string& squirrelSlotTypeName,
     SquirrelContext* m_vm
 
 
-#define EXPOSE_SLOT_BODY_ONE Sqrat::DefaultVM::Set( squirrelContext.GetVM().getVM() )
+#define EXPOSE_SLOT_BODY_ONE Sqrat::DefaultVM::Set( squirrelContext.GetVM().GetVM() )
 
-#define EXPOSE_SLOT_BODY_TWO Sqrat::RootTable().Bind( squirrelSlotTypeName.c_str(), Sqrat::Class< connectorType >()\
+#define EXPOSE_SLOT_BODY_TWO Sqrat::RootTable().Bind( squirrelSlotTypeName.c_str(), Sqrat::Class< connectorType >( Sqrat::DefaultVM::Get(), squirrelSlotTypeName )\
     .Func( "ConnectSlotToSignal", &connectorType::Connect ) );\
     \
     connectorType* connector = new connectorType;\

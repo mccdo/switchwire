@@ -122,15 +122,15 @@ void ExposeSignal_1( switchwire::Event< T >* event,
 }
 */
 
-#define SW_EXPOSESIGNAL_ONE Sqrat::DefaultVM::Set( vm.GetVM().getVM() );\
+#define SW_EXPOSESIGNAL_ONE Sqrat::DefaultVM::Set( vm.GetVM().GetVM() );\
     typedef SQEventWrapper< T > wrapperType;\
-    Sqrat::Class< wrapperType > signalClass;\
+    std::string className = "sq_class" + squirrelName;\
+    Sqrat::Class< wrapperType > signalClass( Sqrat::DefaultVM::Get(), className );\
     signalClass.template Func< typename boost::function_traits< T >::result_type\
             (wrapperType::*)
 
 #define SW_EXPOSESIGNAL_TWO  >\
     ( "signal", &wrapperType::signal );\
-    std::string className = "sq_class" + squirrelName;\
     Sqrat::RootTable().Bind( className.c_str(), signalClass );\
     ManagedLifetimePtr wrapper = ManagedLifetimePtr( new wrapperType );\
     vm.StoreManagedLifetimeObject( wrapper );\
@@ -330,12 +330,12 @@ void ExposeSignalType_1( const std::string& squirrelSignalTypeName,
 }
 */
 
-#define SW_EXPOSESIGNALTYPE_ONE Sqrat::DefaultVM::Set( context.GetVM().getVM() );
+#define SW_EXPOSESIGNALTYPE_ONE Sqrat::DefaultVM::Set( context.GetVM().GetVM() );
 
 
 #define SW_EXPOSESIGNALTYPE_TWO \
     Sqrat::RootTable().Bind( squirrelSignalTypeName.c_str(),\
-                             Sqrat::Class< setupType >()\
+                             Sqrat::Class< setupType >( Sqrat::DefaultVM::Get(), squirrelSignalTypeName )\
                             .Func( "RegisterSignal", &setupType::Create ) );\
     \
     ManagedLifetimePtr setup = ManagedLifetimePtr( new setupType );\

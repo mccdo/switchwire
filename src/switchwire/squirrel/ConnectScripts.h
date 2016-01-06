@@ -27,7 +27,7 @@
 namespace switchwire
 {
 ////////////////////////////////////////////////////////////////////////////////
-#define SW_REPETETIVE_SCRIPT_CONNECTIONCODE Sqrat::DefaultVM::Set( vm.GetVM().getVM() );\
+#define SW_REPETETIVE_SCRIPT_CONNECTIONCODE Sqrat::DefaultVM::Set( vm.GetVM().GetVM() );\
     SqratFunctionPtr sqFunc = SqratFunctionPtr( new Sqrat::Function( Sqrat::RootTable().\
                       GetFunction( scriptFunctionName.c_str() ) ) );\
     vm.StoreSqratFunction( sqFunc )
